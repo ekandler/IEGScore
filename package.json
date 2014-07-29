@@ -1,0 +1,36 @@
+{
+  "name": "IEGScore",
+  "description": "",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Erwin Kandler <e.kandler@gmail.com>",
+  "contributors": [
+    {
+      "name": "Erwin Kandler",
+      "email": "e.kandler@gmail.com"
+    }
+  ],
+  "keywords": [
+    "node",
+    "express",
+    "coffeescript",
+    "socket.io"
+  ],
+  "dependencies": {
+    "express": "4.6.1",
+    "jade": "1.4.2",
+    "socket.io": "1.0.6",
+    "uglify-js": "2.4.15",
+    "body-parser": "1.4.3",
+    "serve-favicon": "2.0.1"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
+  "scripts": {
+    "start": "node app"
+  }
+}
