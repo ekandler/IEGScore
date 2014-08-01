@@ -1,0 +1,53 @@
+
+mixin formElem (title, formfunc)
+    div.row
+        if formfunc
+            form.form-horizontal(ng-submit="#{ formfunc }", role="form")
+                div.form-group
+                    div(class="#{ classLabel }")
+                        label.control-label #{ title }
+                    if block
+                        div(class="#{ classForm }")
+                            block
+        else
+            div.form-horizontal
+                div.form-group
+                    div(class="#{ classLabel }")
+                        label.control-label #{ title }
+                    if block
+                        div(class="#{ classForm }")
+                            block
+                
+
+mixin booleanToggle (fnclick, fnactive, title, enableTxt, disableTxt)
+    +formElem (title)
+        div.btn-group.btn-toggle
+            button.btn.btn-success(ng-click="#{ fnclick }", ng-class="{ active: !#{ fnactive }, disabled: #{ fnactive } }") #{ enableTxt }
+            button.btn.btn-danger(ng-click="#{ fnclick }", ng-class="{ active: #{ fnactive }, disabled: !#{ fnactive } }") #{ disableTxt }
+        if block
+            p.help-block
+                block
+                            
+mixin timeSet (fnset, curTime, tmpVal, defaultval, title)
+    +formElem (title, fnset)
+        div.input-group
+            span.input-group-addon(ng-bind="#{ curTime }")
+            input.form-control(placeholder="#{ defaultval }", type="text", ng-model="#{ tmpVal }")
+            span.input-group-btn
+                button.btn.btn-default(type="submit") Set
+        if block
+            p.help-block
+                block
+
+mixin singleChoice (fnget, elements, title)
+    +formElem (title)
+        div.btn-group(data-toggle="buttons")
+            each elem in elements
+                label.btn.btn-sm(class="#{ elem.class }", ng-click="#{ elem.fnset }", ng-class="{ active: #{ fnget } == #{ elem.val } }")
+                    input(type="radio")
+                    | #{ elem.text }
+        if block
+            p.help-block
+                block
+                    
+

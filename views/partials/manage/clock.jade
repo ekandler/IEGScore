@@ -1,0 +1,27 @@
+extends managelayout
+include mixins
+
+block panelvars
+  - var panelheading='Game Clock'
+  - var description = 'Sets the clock of the game'
+
+block managecontent
+    div(ng-controller='GameClock')
+        - var mainClass = 'GameClock'
+        +booleanToggle("toggleClockVisibility()", "getClockVisible()", "Show game clock", "Show", "Hide")
+        +timeSet("setTime()", "getTime()", "enteredTime", "12:00", "Current Time")
+        +booleanToggle("toggleClockRunning()", "getClockRunning()", "Start/Stop Time", "Start", "Stop")
+
+        //- additional clock info elements
+        -var elements = []
+        -elements.push({class: "btn-primary", text: "No Info", val: 0, fnset: "setInfo(0)"})
+        -elements.push({class: "btn-warning", text: "Flag", val: 1, fnset: "setInfo(1)"})
+        -elements.push({class: "btn-info", text: "T Home", val: 2, fnset: "stopClock(); setInfo(2)"})
+        -elements.push({class: "btn-info", text: "T Guests", val: 3, fnset: "stopClock(); setInfo(3)"})
+        -elements.push({class: "btn-info", text: "T Officials", val: 4, fnset: "stopClock(); setInfo(4)"})
+        +singleChoice("getInfo()", elements, "Additional Info")
+            | Pressing a timeout button stops the clock.
+
+                    
+                    
+

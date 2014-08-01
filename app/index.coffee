@@ -1,6 +1,4 @@
-###
-  Module dependencies.
-###
+
 
 config = require "./config"
 express = require "express"
@@ -34,11 +32,21 @@ app.use express["static"] path.join process.cwd(), config.PUBLIC_PATH
 # Views
 app.get "/", routes.index
 app.get "/partials/:name", routes.partials
+app.get "/partials/:dir/:name", routes.partialdirs
+app.get "/manage", routes.manage
+app.get "/view", routes.view
+
 
 # Services
 users = require "./services/users"
 app.get "/users", users.list
 app.get "/users/:id", users.get
+
+
+
+
+# bower components
+app.use '/bower_components',  express.static(__dirname + '/bower_components')
 
 ###
   Server startup

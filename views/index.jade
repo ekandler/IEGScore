@@ -1,5 +1,8 @@
 extends layout
 
+block head
+  - var ngApp = 'myApp'
+
 block content
   div.jumbotron
 
@@ -20,13 +23,4 @@ block content
       | Angular Espresso, version &nbsp;
       span(app-version)
 
-  script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
-  script(src='//cdn.socket.io/socket.io-1.0.6.js')
-  script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.js')
-  script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular-resource.min.js')
-  script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular-route.min.js')
-  script(src='/angular/app.js')
-  script(src='/angular/services.js')
-  script(src='/angular/controllers.js')
-  script(src='/angular/filters.js')
-  script(src='/angular/directives.js')
+
