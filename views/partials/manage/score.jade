@@ -1,0 +1,70 @@
+extends managelayout
+include mixins
+
+block panelvars
+  - var panelheading='Scoreboard'
+  - var description = 'Sets the points and timeouts of the teams, as well as down and distance to go'
+  
+  //-
+    | Touchdown: 6 points
+    br
+    | Field goal (in mid-game): 3 points
+    br
+    | Safety (in mid-game): 2 points
+    br
+    | Conversion (after touchdown): 2 points
+    br
+    | Field goal (after touchdown): 1 point
+  
+  
+mixin points (title, home)
+    - var fn = "getPoints(" + home + ")"
+    +formElem (title, fn)
+        div.input-group
+            div.btn-group
+                button.btn.btn-danger(ng-click="setPoints(#{ home }, getPoints(#{ home }) -6)") -6
+                button.btn.btn-danger(ng-click="setPoints(#{ home }, getPoints(#{ home }) -3)") -3
+                button.btn.btn-danger(ng-click="setPoints(#{ home }, getPoints(#{ home }) -2)") -2
+                button.btn.btn-danger(ng-click="setPoints(#{ home }, getPoints(#{ home }) -1)") -1
+            | &nbsp;
+            div.btn-group
+                button.btn.btn-success(ng-click="setPoints(#{ home }, getPoints(#{ home }) +1)") +1
+                button.btn.btn-success(ng-click="setPoints(#{ home }, getPoints(#{ home }) +2)") +2
+                button.btn.btn-success(ng-click="setPoints(#{ home }, getPoints(#{ home }) +3)") +3
+                button.btn.btn-success(ng-click="setPoints(#{ home }, getPoints(#{ home }) +6)") +6
+        if block
+            p.help-block
+                block
+
+  
+block managecontent
+    div(ng-controller='Scoreboard')
+        //- Score
+        +formElem ("Total Points", "getPoints(true) + ':' + getPoints(false)", "setPoints()")
+            div.input-group
+                span.input-group-addon.control-label Home
+                input.form-control.form-score(ng-model="tmpHomePoints", select-on-click)
+                span.input-group-addon.control-label Guests
+                input.form-control.form-score(ng-model="tmpGuestPoints", select-on-click)
+                span.input-group-btn
+                    button.btn.btn-default Set
+        
+        +points("Points Home", true)
+        +points("Points Guests", false)
+        
+        +incDecVal("getTimoutsHome()", "setTimoutsHome()", "setTimoutsHome(getTimoutsHome()+1)", "setTimoutsHome(getTimoutsHome()-1)", "enteredTimeoutsHome", "Timeouts Home")
+        +incDecVal("getTimoutsGuests()", "setTimoutsGuests()", "setTimoutsGuests(getTimoutsGuests()+1)", "setTimoutsGuests(getTimoutsGuests()-1)", "enteredTimeoutsGuests", "Timeouts Guests")
+            | Special values: -1 (unknown / hide)
+            
+
+        -var elements = []
+        -elements.push({class: "btn-primary", text: "Unknown/Hide", val: 0, fnset: "setDown(0)"})
+        -elements.push({class: "btn-info", text: "1st", val: 1, fnset: "setDown(1)"})
+        -elements.push({class: "btn-info", text: "2nd", val: 2, fnset: "setDown(2)"})
+        -elements.push({class: "btn-info", text: "3rd", val: 3, fnset: "setDown(3)"})
+        -elements.push({class: "btn-info", text: "4th", val: 4, fnset: "setDown(4)"})
+        +singleChoice("getDown()", elements, "Down")
+            
+            
+        +incDecVal("getDistance()", "setDistance()", "setDistance(getDistance()+1)", "setDistance(getDistance()-1)", "enteredDistance", "Distance to go", "10")
+            | Distance of 0 specifies '&amp; Goal'

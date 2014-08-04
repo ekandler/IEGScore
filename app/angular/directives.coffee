@@ -9,3 +9,10 @@ angular.module("myApp.directives", ["ngResource"])
   (scope, elm, attrs) ->
     elm.text version
 ]
+.directive 'selectOnClick',  ->
+  restrict: 'A'
+  link: (scope, element, attrs) -> 
+    element.on('click', -> 
+      this.select()
+    )
+

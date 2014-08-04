@@ -4,6 +4,7 @@ include mixins
 block panelvars
   - var panelheading='Game Clock'
   - var description = 'Sets the clock of the game'
+  
 
 block managecontent
     div(ng-controller='GameClock')
@@ -11,7 +12,7 @@ block managecontent
         +booleanToggle("toggleClockVisibility()", "getClockVisible()", "Show game clock", "Show", "Hide")
         +timeSet("setTime()", "getTime()", "enteredTime", "12:00", "Current Time")
         +booleanToggle("toggleClockRunning()", "getClockRunning()", "Start/Stop Time", "Start", "Stop")
-
+        
         //- additional clock info elements
         -var elements = []
         -elements.push({class: "btn-primary", text: "No Info", val: 0, fnset: "setInfo(0)"})
@@ -21,7 +22,9 @@ block managecontent
         -elements.push({class: "btn-info", text: "T Officials", val: 4, fnset: "stopClock(); setInfo(4)"})
         +singleChoice("getInfo()", elements, "Additional Info")
             | Pressing a timeout button stops the clock.
-
-                    
-                    
+            
+        +incDecVal("getQuarter()", "setQuarter()", "setQuarter(getQuarter()+1)", "setQuarter(getQuarter()-1)", "enteredQuarter", "Quarter")
+            | Special values: 0 (unknown / hide), 5 (Overtime)
+                
+                
 

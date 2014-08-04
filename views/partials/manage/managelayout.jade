@@ -1,9 +1,13 @@
 - var classLabel = "col-md-3"
 - var classForm = "col-md-4"
+- var debug = true
 
 div.panel.panel-default
     block panelvars
     div.panel-heading #{panelheading}
     div.panel-body
-        div.container-fluid
-            block managecontent
+        p #{description}
+    ul.list-group
+        block managecontent
+        //- div.container-fluid
+        

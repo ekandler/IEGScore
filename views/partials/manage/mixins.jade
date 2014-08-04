@@ -1,26 +1,32 @@
 
-mixin formElem (title, formfunc)
-    div.row
+mixin formElem (title, value, formfunc )
+    //-div.row
+    
+    li.list-group-item
         if formfunc
             form.form-horizontal(ng-submit="#{ formfunc }", role="form")
                 div.form-group
                     div(class="#{ classLabel }")
-                        label.control-label #{ title }
+                        label.control-label #{ title } &nbsp;
+                        if debug
+                            span.badge.alert-info(ng-bind=value)
                     if block
                         div(class="#{ classForm }")
                             block
         else
-            div.form-horizontal
+            form.form-horizontal(role="form")
                 div.form-group
                     div(class="#{ classLabel }")
-                        label.control-label #{ title }
+                        label.control-label #{ title } &nbsp;
+                        if debug
+                            span.badge.alert-info(ng-bind=value)
                     if block
                         div(class="#{ classForm }")
                             block
                 
 
 mixin booleanToggle (fnclick, fnactive, title, enableTxt, disableTxt)
-    +formElem (title)
+    +formElem (title, fnactive)
         div.btn-group.btn-toggle
             button.btn.btn-success(ng-click="#{ fnclick }", ng-class="{ active: !#{ fnactive }, disabled: #{ fnactive } }") #{ enableTxt }
             button.btn.btn-danger(ng-click="#{ fnclick }", ng-class="{ active: #{ fnactive }, disabled: !#{ fnactive } }") #{ disableTxt }
@@ -29,7 +35,7 @@ mixin booleanToggle (fnclick, fnactive, title, enableTxt, disableTxt)
                 block
                             
 mixin timeSet (fnset, curTime, tmpVal, defaultval, title)
-    +formElem (title, fnset)
+    +formElem (title, curTime, fnset)
         div.input-group
             span.input-group-addon(ng-bind="#{ curTime }")
             input.form-control(placeholder="#{ defaultval }", type="text", ng-model="#{ tmpVal }")
@@ -40,7 +46,7 @@ mixin timeSet (fnset, curTime, tmpVal, defaultval, title)
                 block
 
 mixin singleChoice (fnget, elements, title)
-    +formElem (title)
+    +formElem (title, fnget)
         div.btn-group(data-toggle="buttons")
             each elem in elements
                 label.btn.btn-sm(class="#{ elem.class }", ng-click="#{ elem.fnset }", ng-class="{ active: #{ fnget } == #{ elem.val } }")
@@ -51,3 +57,18 @@ mixin singleChoice (fnget, elements, title)
                 block
                     
 
+mixin incDecVal (fnget, fnset, fninc, fndec, tmpVal, title, defaultval)
+    +formElem (title, fnget)
+        div.input-group
+            span.input-group-addon(ng-bind="#{ fnget }")
+            if defaultval
+                input.form-control(type="text", ng-model="#{ tmpVal }", placeholder="#{ defaultval }")
+            else
+                input.form-control(type="text", ng-model="#{ tmpVal }")
+            div.input-group-btn
+                button.btn.btn-default(type="submit", ng-click="#{ fnset }") Set
+                button.btn.btn-default(ng-click="#{ fndec }") -1
+                button.btn.btn-default(ng-click="#{ fninc }") +1
+        if block
+            p.help-block
+                block

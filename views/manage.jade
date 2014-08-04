@@ -6,10 +6,10 @@ block head
 block content
     div(ng-controller='GameDataCtrl')
         //- Navigation bar
-        nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+        nav.navbar.navbar-default.navbar-fixed-top(ng-controller="HeaderController")
             div.container-fluid
                 div.navbar-header
-                    button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+                    button.navbar-toggle(type="button")
                         span.sr-only Toggle navigation
                         span.icon-bar
                         span.icon-bar
@@ -17,8 +17,8 @@ block content
                     a.navbar-brand(href="#") IEG-Score
                 div.collapse.navbar-collapse
                     ul.nav.navbar-nav
-                        li.active: a(href="#/clock") Game Clock
-                        li:        a(href="#/score") Scoreboard
+                        li(ng-class="{ active: isActive('/clock')}"): a(href='#/clock') Game Clock
+                        li(ng-class="{ active: isActive('/score')}"): a(href='#/score') Scoreboard
     
         section.container
             div(ng-view)
