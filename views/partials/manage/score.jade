@@ -40,14 +40,14 @@ mixin points (title, home)
 block managecontent
     div(ng-controller='Scoreboard')
         //- Score
-        +formElem ("Total Points", "getPoints(true) + ':' + getPoints(false)", "setPoints()")
+        +formElem ("Total Points", "getPoints(true) + ':' + getPoints(false)", true)
             div.input-group
                 span.input-group-addon.control-label Home
                 input.form-control.form-score(ng-model="tmpHomePoints", select-on-click)
                 span.input-group-addon.control-label Guests
                 input.form-control.form-score(ng-model="tmpGuestPoints", select-on-click)
                 span.input-group-btn
-                    button.btn.btn-default Set
+                    button.btn.btn-default(ng-click="setPoints()") Set
         
         +points("Points Home", true)
         +points("Points Guests", false)

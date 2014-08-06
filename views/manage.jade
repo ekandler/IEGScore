@@ -11,7 +11,7 @@ block content
                 div.navbar-header
                     button.navbar-toggle(type="button")
                         span.sr-only Toggle navigation
-                        span.icon-bar
+                        span.icon-bar 
                         span.icon-bar
                         span.icon-bar
                     a.navbar-brand(href="#") IEG-Score
@@ -19,6 +19,8 @@ block content
                     ul.nav.navbar-nav
                         li(ng-class="{ active: isActive('/clock')}"): a(href='#/clock') Game Clock
                         li(ng-class="{ active: isActive('/score')}"): a(href='#/score') Scoreboard
+                        li(ng-class="{ active: isActive('/roster/home')}"): a(href='#/roster/home') Roster Home
+                        li(ng-class="{ active: isActive('/roster/guests')}"): a(href='#/roster/guests') Roster Guests
     
         section.container
             div(ng-view)

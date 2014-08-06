@@ -1,0 +1,46 @@
+extends managelayout
+include mixins
+
+block panelvars
+  - var panelheading='Roster {{ team }}'
+  - var description = 'Enter the team'
+  
+
+block managecontent
+    +formElem ("Team Name", "model.teamNameLong")
+        div.form-control-static
+            a(editable-text="model.teamNameLong", onaftersave="update()", e-required, d-class="form-control") {{ model.teamNameLong || "empty" }}
+    +formElem ("Team Name Short", "model.teamNameShort")
+        div.form-control-static
+            a(editable-text="model.teamNameShort", onaftersave="update()", e-required, d-class="form-control") {{ model.teamNameShort || "empty" }}
+                
+    div.table-responsive
+        table.table.table-bordered.table-hover.table-condensed
+            tr
+                th Number
+                th Name
+                th Position
+                th Date of birth
+                th Size (cm)
+                th Weight
+                th Exp
+                th Nat
+                th Actions
+            tr(ng-repeat="player in model.roster")
+                td: span(editable-number="player.number", e-name="number", e-form="rowform") {{ player.number || 'empty' }}
+                td: span(editable-text="player.name", e-name="name", e-form="rowform", onbeforesave="checkName($data, player.id)", e-required) {{ player.name || 'empty' }}
+                td: span(editable-select="player.position" e-name="position" e-form="rowform" e-ng-options="s.value as s.text for s in positions") {{ player.position || 'empty' }}
+                td: span(editable-date="player.dob", e-name="dob", e-form="rowform") {{ player.dob || 'empty' }}
+                td: span(editable-number="player.size", e-name="size", e-form="rowform") {{ player.size || 'empty' }}
+                td: span(editable-number="player.weight", e-name="weight", e-form="rowform") {{ player.weight || 'empty' }}
+                td: span(editable-text="player.exp", e-name="exp", e-form="rowform") {{ player.exp || 'empty' }}
+                td: span(editable-text="player.nat", e-name="nat", e-form="rowform") {{ player.nat || 'empty' }}
+                td(style="white-space: nowrap")
+                    form.form-buttons.form-inline(editable-form="", name="rowform", ng-show="rowform.$visible", oncancel="inserted == player ? removePlayer($index) : true", onaftersave="update()", shown="inserted == player")
+                        button.btn.btn-primary(type="submit", ng-disabled="rowform.$waiting") Save
+                        button.btn.btn-default(type="button", ng-disabled="rowform.$waiting", ng-click="rowform.$cancel()") Cancel
+                    div.buttons(ng-show="!rowform.$visible")
+                        button.btn.btn-primary(ng-click="rowform.$show()") Edit
+                        button.btn.btn-danger(ng-click="removePlayer($index)") Delete
+                        button.btn.btn-info Send
+    button.btn.btn-default(ng-click="addPlayer()") Add Player

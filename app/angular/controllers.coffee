@@ -41,8 +41,22 @@ SocketCtrl.$inject = ["$scope", "Socket"]
 RouteController = ($scope, $routeParams) ->
   $scope.templateUrl = '/partials/manage/'+$routeParams.part
   
+
+  
+  
   console.log($scope.templateUrl)
  
+ 
+RosterController = ($scope, $routeParams) ->
+  $scope.team = $routeParams.team.toLowerCase()
+  
+  if $scope.team is "home"
+    new HomeTeam($scope)
+  else if $scope.team is "guests"
+    new GuestTeam($scope)
+  else
+    $scope.team = "---INVALID---"
+  
 
 HeaderController = ($scope, $location) ->
     $scope.isActive =  (viewLocation) ->
@@ -369,6 +383,61 @@ class Scoreboard extends DataElement
       $scope.enteredDistance = ''
       $scope.update()
         
+class Team extends DataElement
+  key: "unknownTeam"
+  
+		
+  constructor:  ($scope) ->
+    super $scope
+    $scope.model = {
+      teamNameLong: null
+      teamNameShort: null
+      roster: []
+    } 
+    
+ 
+    
+    $scope.positions = [
+      {value: 'HC', text: 'Headcoach'},
+      {value: 'QB', text: 'Quarterback'},
+      {value: 'RB', text: 'Runningback'},
+    ]; 
+    
+    $scope.addPlayer = ->
+      $scope.inserted = {
+        id: $scope.model.roster.length+1
+        number: $scope.model.roster.length+1
+        name: ''
+        position: null
+        dob: null
+        size: null
+        weight: null
+        exp: null
+        nat: "AT"
+      }
+      $scope.model.roster.push($scope.inserted)
+      
+    $scope.removePlayer = (index) ->
+      $scope.model.roster.splice(index, 1)
+      
+    $scope.checkName = (data, id) ->
+      if data is ""
+        return "Empty name not allowed"
+        
+    
+
+class HomeTeam extends Team
+  key: "HomeTeam"
+class GuestTeam extends Team
+  key: "GuestTeam"
+  
+class TeamRouter
+  constructor:  ($scope) ->
+    console.log $scope.team
+    if $scope.team is "home"
+      new HomeTeam($scope)
+    else
+      new GuestTeam($scope)
   
 class DataClass
   data: []
