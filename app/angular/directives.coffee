@@ -9,10 +9,53 @@ angular.module("myApp.directives", ["ngResource"])
   (scope, elm, attrs) ->
     elm.text version
 ]
-.directive 'selectOnClick',  ->
+
+module = angular.module("ScoreApp.directives", ["ngResource"])
+
+module.directive 'selectOnClick',  ->
   restrict: 'A'
   link: (scope, element, attrs) -> 
     element.on('click', -> 
       this.select()
     )
 
+module.directive 'downloadData', ($compile, $interval) ->
+  restrict:'E'
+  #scope:{ getData: '&'}
+  link: (scope, elm, attrs) ->
+    
+    
+    setData = ->
+      url = URL.createObjectURL(scope.getDownloadData())
+      key = scope.key
+      console.log "new download"
+      elm.empty()
+      elm.append($compile(
+          '<a class="btn btn-sm btn-primary" download="'+key+'.json"' +
+              'href="' + url + '">' +
+              'Download' +
+              '</a>'
+      )(scope));
+      
+    #timeoutId = $interval( ( -> 
+    #  setData()
+    #), 1000);
+              
+    scope.$watch('model', setData, true);
+    
+module.directive "ngFileSelect", ->
+    link: ($scope,el) ->
+      
+      el.bind("change", (e) ->
+      
+        element = (e.srcElement || e.target);
+        $scope.file = element.files[0]
+        $scope.getFile();
+        
+        # try to get rid of file in input
+        try
+          element.value = null
+        catch error
+          element.parentNode.replaceChild(element.cloneNode(true), element);
+        
+      )

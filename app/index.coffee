@@ -16,6 +16,8 @@ app = express()
 env = process.env.NODE_ENV || "development"
 config.setEnv app.settings.env
 
+
+
 app.set "ipaddr", config.HOSTNAME
 app.set "port", config.PORT
 app.set "views", path.join process.cwd(), config.VIEWS_PATH

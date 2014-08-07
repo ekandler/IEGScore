@@ -15,12 +15,16 @@ angular.module("myApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.di
   ]
 
 
-angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.directives", "xeditable"])
+angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable"])
 .config ["$routeProvider",
   ($routeProvider) ->
     $routeProvider.when "/roster/:team", {templateUrl: "partials/manage/roster", controller: RosterController}
     $routeProvider.when "/:part", {templateUrl: "partials/router", controller: RouteController}
     $routeProvider.otherwise {redirectTo: "/clock"}
+  ]
+.config ["$logProvider",
+  ($logProvider) ->
+    $logProvider.debugEnabled(true);
   ]
 .run((editableOptions, editableThemes) -> (
   editableOptions.theme = 'bs3';

@@ -86,6 +86,23 @@ class DataElement
       $scope.doNotSend = false
       #$scope.$apply()
       
+    $scope.getDownloadData =  ->
+      json = JSON.stringify($scope.model)
+      return new Blob([json], {type: "application/json"})
+      
+    $scope.getFile =  ->
+      reader = new FileReader()
+      reader.onload = ->
+        #TODO add some security
+        text = reader.result
+        newmodel = JSON.parse(text)
+        $scope.model = newmodel
+        $scope.update()
+        
+        
+      reader.readAsText($scope.file);
+      
+      
     $scope.data.registerElem($scope.key, $scope)
     $scope.requestCurrentData($scope.key)
 
@@ -395,7 +412,6 @@ class Team extends DataElement
       roster: []
     } 
     
- 
     
     $scope.positions = [
       {value: 'HC', text: 'Headcoach'},
@@ -403,6 +419,21 @@ class Team extends DataElement
       {value: 'RB', text: 'Runningback'},
     ]; 
     
+    $scope.showPositions = (player) ->
+      selected = [];
+      try
+        angular.forEach($scope.positions, (s) -> 
+          if (player.position.indexOf(s.value) >= 0) 
+            selected.push(s.text);
+        )
+        if selected.length
+          selected.join(', ')
+        else
+          'Not set'
+      catch error
+        'Not set'
+      
+      
     $scope.addPlayer = ->
       $scope.inserted = {
         id: $scope.model.roster.length+1
@@ -419,6 +450,7 @@ class Team extends DataElement
       
     $scope.removePlayer = (index) ->
       $scope.model.roster.splice(index, 1)
+      $scope.update()
       
     $scope.checkName = (data, id) ->
       if data is ""
@@ -529,6 +561,8 @@ class GameDataCtrl
       console.log "unregistering tick"
       data_k_v = {key: key, elem: elem}
       Socket.emit('unregisterTick', data_k_v)
+      
+
     
 
 #ManageCtrl.$inject = ["$scope", "Socket"]
