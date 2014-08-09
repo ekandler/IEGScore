@@ -22,19 +22,20 @@ block managecontent
     div.table-responsive
         table.table.table-bordered.table-hover.table-condensed
             tr
-                th(style="width: 65px") Number
-                th Name
-                th Position
-                th Date of birth
-                th Size (cm)
-                th Weight
-                th Exp
-                th Nat
+                th(style="width: 65px", ng-click="predicate = 'number'; reverse=!reverse") Number
+                th(style="min-width: 150px", ng-click="predicate = 'name'; reverse=!reverse") Name
+                th(style="min-width: 200px", ng-click="predicate = 'position'; reverse=!reverse") Position
+                th(ng-click="predicate = 'dob'; reverse=!reverse") Date of birth
+                th(ng-click="predicate = 'size'; reverse=!reverse") Size (cm)
+                th(ng-click="predicate = 'weight'; reverse=!reverse") Weight
+                th(ng-click="predicate = 'exp'; reverse=!reverse") Exp
+                th(ng-click="predicate = 'nat'; reverse=!reverse") Nat
                 th Actions
-            tr(ng-repeat="player in model.roster")
+            tr(ng-repeat="player in model.roster") 
+                //- | orderBy:predicate:reverse
                 td: span(editable-number="player.number", e-name="number", e-form="rowform") {{ player.number || 'empty' }}
                 td: span(editable-text="player.name", e-name="name", e-form="rowform", onbeforesave="checkName($data, player.id)", e-required) {{ player.name || 'empty' }}
-                td: span(editable-select="player.position", e-name="position", e-form="rowform", e-multiple, e-ng-options="s.value as s.text for s in positions") {{ showPositions(player) }}
+                td: span(editable-select="player.position", e-name="position", e-form="rowform", e-multiple, e-ng-options="s.value as s.text for s in positions", e-class="position-select") {{ showPositions(player) }}
                 td: span(editable-date="player.dob", e-name="dob", e-form="rowform") {{ player.dob || 'empty' }}
                 td: span(editable-number="player.size", e-name="size", e-form="rowform") {{ player.size || 'empty' }}
                 td: span(editable-number="player.weight", e-name="weight", e-form="rowform") {{ player.weight || 'empty' }}

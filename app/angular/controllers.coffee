@@ -412,12 +412,32 @@ class Team extends DataElement
       roster: []
     } 
     
-    
+    # Types:
+    # 0: Coach/coordinator
+    # 1: Offense
+    # 2: Defense
+    # 3: Special Team
     $scope.positions = [
-      {value: 'HC', text: 'Headcoach'},
-      {value: 'QB', text: 'Quarterback'},
-      {value: 'RB', text: 'Runningback'},
+      {value: 'HC', text: 'Headcoach', type: 0}
+      {value: 'OC', text: 'Offense Coordinator', type: 0}
+      {value: 'DC', text: 'Defense Coordinator', type: 0}
+      {value: 'SC', text: 'Special Coordinator', type: 0}
+      
+      {value: 'OL', text: 'Offensive Live', type: 1}
+      {value: 'QB', text: 'Quarterback', type: 1}
+      {value: 'RB', text: 'Runningback', type: 1}
+      {value: 'WR', text: 'Wide Receiver', type: 1}
+      {value: 'TE', text: 'Tight End', type: 1}
+      
+      {value: 'DL', text: 'Defensive Line', type: 2}
+      {value: 'LB', text: 'Linebacker', type: 2}
+      {value: 'DB', text: 'Defensive Back', type: 2}
+      
+      {value: 'P', text: 'Punter', type: 3}
+      {value: 'K', text: 'Kicker', type: 3}
+      {value: 'ST', text: 'other Special', type: 3}
     ]; 
+    
     
     $scope.showPositions = (player) ->
       selected = [];
@@ -447,6 +467,8 @@ class Team extends DataElement
         nat: "AT"
       }
       $scope.model.roster.push($scope.inserted)
+      
+    $scope.predicate = 'number';
       
     $scope.removePlayer = (index) ->
       $scope.model.roster.splice(index, 1)
