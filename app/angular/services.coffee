@@ -23,6 +23,9 @@ angular.module("myApp.services", [])
         socket.on event, (data) ->
           $rootScope.$apply ->
             callback data
+            
+      socketService.isConnected = ->
+        socket.connected
 
       socketService
   ]

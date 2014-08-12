@@ -275,8 +275,30 @@ class Scoreboard extends DataElement
       pointsGuests: 0
       down: 0
       distance: 10
-    }  
+      posessionHome: true
+      visible: false
+    } 
     
+    $scope.getBallPossession = ->
+      $scope.model.posessionHome
+      
+    $scope.toggleBallPossession = ->
+      if $scope.model.posessionHome
+        $scope.model.posessionHome = false
+      else
+        $scope.model.posessionHome = true
+      $scope.update()
+        
+    $scope.getScoreboardVisibility = ->
+      $scope.model.visible
+      
+    $scope.toggleScoreboardVisibility = ->
+      if $scope.model.visible
+        $scope.model.visible = false
+      else
+        $scope.model.visible = true
+      $scope.update()
+        
     $scope.getTimoutsHome = ->
       $scope.model.timeOutsHome
       
@@ -423,7 +445,7 @@ class Team extends DataElement
       {value: 'DC', text: 'Defense Coordinator', type: 0}
       {value: 'SC', text: 'Special Coordinator', type: 0}
       
-      {value: 'OL', text: 'Offensive Live', type: 1}
+      {value: 'OL', text: 'Offensive Line', type: 1}
       {value: 'QB', text: 'Quarterback', type: 1}
       {value: 'RB', text: 'Runningback', type: 1}
       {value: 'WR', text: 'Wide Receiver', type: 1}
@@ -583,6 +605,17 @@ class GameDataCtrl
       console.log "unregistering tick"
       data_k_v = {key: key, elem: elem}
       Socket.emit('unregisterTick', data_k_v)
+      
+    $scope.connectionLosses = 0
+    $scope.connectedOld = false
+    $scope.isConnected = ->
+      if Socket.isConnected()
+        $scope.connectedOld = true
+      if not Socket.isConnected() and $scope.connectedOld
+        $scope.connectionLosses += 1
+        $scope.connectedOld = false
+      Socket.isConnected()
+        
       
 
     

@@ -21,6 +21,21 @@ block content
                         li(ng-class="{ active: isActive('/score')}"): a(href='#/score') Scoreboard
                         li(ng-class="{ active: isActive('/roster/home')}"): a(href='#/roster/home') Roster Home
                         li(ng-class="{ active: isActive('/roster/guests')}"): a(href='#/roster/guests') Roster Guests
-    
+        script.
+            Mousetrap.bind('1', function() { location = '#/clock'; });
+            Mousetrap.bind('2', function() { location = '#/score'; });
+            Mousetrap.bind('3', function() { location = '#/roster/home'; });
+            Mousetrap.bind('4', function() { location = '#/roster/guests'; });
+            Mousetrap.bindGlobal('alt+1', function() { location = '#/clock'; });
+            Mousetrap.bindGlobal('alt+2', function() { location = '#/score'; });
+            Mousetrap.bindGlobal('alt+3', function() { location = '#/roster/home'; });
+            Mousetrap.bindGlobal('alt+4', function() { location = '#/roster/guests'; });
+     
+     
+        
+        section.container(ng-hide="isConnected()")
+            div.alert(ng-class="{true: 'alert-danger', false: 'alert-info'}[connectionLosses >= 1]")
+                strong Warning! 
+                | Currently there is not connection to the server! Any user input will be discarded. Trying to reconnect...
         section.container
             div(ng-view)

@@ -40,6 +40,11 @@ mixin points (title, home)
 block managecontent
     div(ng-controller='Scoreboard')
         //- Score
+        +booleanToggle("toggleScoreboardVisibility()", "getScoreboardVisibility()", "Display Scoreboard", "Show", "Hide")
+        +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "Home", "Guests")
+            | Offense: {{ getBallPossession() ? "Home" : "Guests" }}
+            br
+            | Defense: {{ !getBallPossession() ? "Home" : "Guests" }}
         +formElem ("Total Points", "getPoints(true) + ':' + getPoints(false)", true)
             div.input-group
                 span.input-group-addon.control-label Home
