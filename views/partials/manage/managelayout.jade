@@ -4,7 +4,9 @@
 
 div.panel.panel-default
     block panelvars
-    div.panel-heading #{panelheading}
+    div.panel-heading #{panelheading} 
+        span.label.label-success(ng-show="isConnected()") connected
+        span.label.label-danger(ng-hide="isConnected()") not connected
     div.panel-body
         p #{description}
     ul.list-group
