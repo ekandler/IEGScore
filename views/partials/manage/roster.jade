@@ -31,7 +31,7 @@ block managecontent
                 th(ng-click="predicate = 'exp'; reverse=!reverse") Exp
                 th(ng-click="predicate = 'nat'; reverse=!reverse") Nat
                 th Actions
-            tr(ng-repeat="player in model.roster") 
+            tr(ng-repeat="player in model.roster | orderBy:predicate:reverse") 
                 //- | orderBy:predicate:reverse
                 td: span(editable-number="player.number", e-name="number", e-form="rowform") {{ player.number || 'empty' }}
                 td: span(editable-text="player.name", e-name="name", e-form="rowform", onbeforesave="checkName($data, player.id)", e-required) {{ player.name || 'empty' }}
@@ -43,10 +43,11 @@ block managecontent
                 td: span(editable-text="player.nat", e-name="nat", e-form="rowform") {{ player.nat || 'empty' }}
                 td(style="white-space: nowrap")
                     form.form-buttons.form-inline(editable-form="", name="rowform", ng-show="rowform.$visible", oncancel="inserted == player ? removePlayer($index) : true", onaftersave="update()", shown="inserted == player")
-                        button.btn.btn-primary(type="submit", ng-disabled="rowform.$waiting") Save
-                        button.btn.btn-default(type="button", ng-disabled="rowform.$waiting", ng-click="rowform.$cancel()") Cancel
+                        button.btn.btn-sm.btn-primary(type="submit", ng-disabled="rowform.$waiting") Save
+                        button.btn.btn-sm.btn-default(type="button", ng-disabled="rowform.$waiting", ng-click="rowform.$cancel()") Cancel
                     div.buttons(ng-show="!rowform.$visible")
-                        button.btn.btn-primary(ng-click="rowform.$show()") Edit
-                        button.btn.btn-danger(ng-click="removePlayer($index)") Delete
-                        button.btn.btn-info Send
-    button.btn.btn-default(ng-click="addPlayer()") Add Player
+                        button.btn.btn-sm.btn-primary(ng-click="rowform.$show()") Edit
+                        button.btn.btn-sm.btn-danger(ng-click="removePlayer(player)") Delete
+                        button.btn.btn-sm.btn-info(ng-click="sendPlayer(player)") Send
+    button.add.btn.btn-default(ng-click="addPlayer()") Add Player
+

@@ -40,7 +40,12 @@ mixin points (title, home)
 block managecontent
     div(ng-controller='Scoreboard')
         //- Score
-        +booleanToggle("toggleScoreboardVisibility()", "getScoreboardVisibility()", "Display Scoreboard", "Show", "Hide")
+        +formElem ("Display Scoreboard", "'small: ' + getScorebardVisibleSmall() + '\nbig:' + getScorebardVisibleBig()")
+            div.btn-group.btn-toggle
+                button.btn.btn-success(ng-click="showScoreboardSmall()", ng-class="{ active: !getScorebardVisibleSmall(), disabled: getScorebardVisibleSmall() }") Show
+                button.btn.btn-warning(ng-click="showScoreboardBig()", ng-class="{ active: !getScorebardVisibleBig(), disabled: getScorebardVisibleBig() }") Full
+                button.btn.btn-danger(ng-click="hideScoreboard()", ng-class="{ active: getScorebardVisibleSmall() || getScorebardVisibleBig(), disabled: !(getScorebardVisibleSmall() || getScorebardVisibleBig())}") Hide
+        
         +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "Home", "Guests")
             | Offense: {{ getBallPossession() ? "Home" : "Guests" }}
             br

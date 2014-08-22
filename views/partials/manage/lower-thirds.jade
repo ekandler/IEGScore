@@ -1,0 +1,50 @@
+extends managelayout
+include mixins
+
+block panelvars
+  - var panelheading='Lower Thirds'
+  - var description = ''
+
+block managecontent
+    div(ng-controller='LowerThirds')
+
+        +booleanToggle("toggleRefVisibility()", "getRefVisible()", "Show referee decision", "Show", "Hide")
+        +formElem ("Set referee decision", "getRefContent()|json", true)
+            input.form-control(type="text", class="sfTypeahead", options="refOptions", datasets="refData", select-on-click, ng-model="model.RefDecision")
+                
+        +formElem ("Show player info", "'small: ' + getPlayerVisbileSmall() + '\nfull:' + getPlayerVisbileLarge()")
+            div.btn-group.btn-toggle
+                button.btn.btn-success(ng-click="showPlayerSmall()", ng-class="{ active: !getPlayerVisbileSmall(), disabled: getPlayerVisbileSmall() }") Show
+                button.btn.btn-warning(ng-click="showPlayerLarge()", ng-class="{ active: !getPlayerVisbileLarge(), disabled: getPlayerVisbileLarge() }") Full
+                button.btn.btn-danger(ng-click="hidePlayer()", ng-class="{ active: getPlayerVisbileSmall() || getPlayerVisbileLarge(), disabled: !(getPlayerVisbileSmall() || getPlayerVisbileLarge())}") Hide
+        +formElem ("Set player to be displayed", "model.Player.name", true)
+            div.input-group
+                input.form-control(ng-init="initBloodhound()", type="text", class="sfTypeahead", options="playerOptions", datasets="playerData", select-on-click, ng-model="tmpPlayer")
+                div.input-group-btn
+                    button.btn.btn-primary(ng-disabled="!tmpPlayer", type="submit", ng-click="setPlayer()") Set
+        div.table-responsive(ng-show="model.Player")
+            table.table.table-bordered.table-condensed
+                tr
+                    td {{  getDataElem(model.Player.team).model.teamNameShort }}
+                    td # {{ model.Player.number }}
+                    td {{ model.Player.name }}
+                    td {{ model.Player.position.join() }}
+                    td {{ model.Player.dob }}
+                    td {{ model.Player.size }} cm
+                    td {{ model.Player.weight }} kg
+                    td {{ model.Player.exp }} exp
+                    td {{ model.Player.nat }}
+            
+        +booleanToggle("toggleGPVisibility()", "getGPVisible()", "Show general purpose insert", "Show", "Hide")
+        +formElem ("General purpose templates", "model.GPtemplates.length", true)
+            div.input-group
+                div.input-group-btn
+                    button.btn.btn-info(type="button", ng-click="addGPTemplate()") Add
+                select.form-control(ng-model="curGPtemplate", ng-options="tpl for tpl in model.GPtemplates")
+                    option(value="") -- choose template --
+                div.input-group-btn
+                    button.btn.btn-danger(type="button", ng-click="removeGPTemplate()") Remove
+        +formElem ("Content general purpose insert", "getGPContent()", true)
+            div.form-group
+                textarea.form-control(rows=2,ng-model='tmpGPContent')
+                button.btn.btn-primary(ng-disabled="tmpGPContent == getGPContent()", type="submit", ng-click="setGPContent()") Set

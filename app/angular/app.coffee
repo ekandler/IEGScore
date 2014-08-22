@@ -5,6 +5,11 @@
 ###
 
 angular.module("myApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.directives"])
+.config ["$locationProvider",
+  ($locationProvider) ->
+    $locationProvider.html5Mode(false);
+    $locationProvider.hashPrefix('!');
+  ]
 .config ["$routeProvider",
   ($routeProvider) ->
     $routeProvider.when "/home", {templateUrl: "partials/home", controller: UsersCtrl}
@@ -15,7 +20,7 @@ angular.module("myApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.di
   ]
 
 
-angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable"])
+angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'textAngular', 'siyfion.sfTypeahead'])
 .config ["$routeProvider",
   ($routeProvider) ->
     $routeProvider.when "/roster/:team", {templateUrl: "partials/manage/roster", controller: RosterController}
