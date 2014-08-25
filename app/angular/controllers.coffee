@@ -490,7 +490,7 @@ class Team extends DataElement
     $scope.addPlayer = ->
       $scope.inserted = {
         id: $scope.model.roster.length+1
-        number: $scope.model.roster.length+1
+        number: null
         name: ''
         position: null
         dob: null

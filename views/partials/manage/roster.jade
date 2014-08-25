@@ -19,6 +19,8 @@ block managecontent
         div.form-control-static
             a(editable-text="model.teamNameShort", onaftersave="update()", e-required, d-class="form-control") {{ model.teamNameShort || "empty" }}
                 
+    +formElem ("Add a player", "")
+        button.add.btn.btn-primary(ng-click="addPlayer()") Add Player
     div.table-responsive
         table.table.table-bordered.table-hover.table-condensed
             tr
@@ -49,5 +51,5 @@ block managecontent
                         button.btn.btn-sm.btn-primary(ng-click="rowform.$show()") Edit
                         button.btn.btn-sm.btn-danger(ng-click="removePlayer(player)") Delete
                         button.btn.btn-sm.btn-info(ng-click="sendPlayer(player)") Send
-    button.add.btn.btn-default(ng-click="addPlayer()") Add Player
-
+    +formElem ("Add a player", "")
+        button.add.btn.btn-primary(ng-click="addPlayer()") Add Player
