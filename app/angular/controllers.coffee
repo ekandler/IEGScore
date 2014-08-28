@@ -238,9 +238,23 @@ class GameClock extends DataElement
         parseInt($scope.model.info)
       catch e
         0
-      
+    
     $scope.getQuarter = ->
       $scope.model.quarter
+      
+    $scope.tmpQuarterTxt = ""
+    $scope.getQuarterTxt = ->
+      if $scope.model.quarter is 0
+        return $scope.tmpQuarterTxt
+      switch $scope.model.quarter
+        when 1 then $scope.tmpQuarterTxt = "1st"
+        when 2 then $scope.tmpQuarterTxt = "2nd"
+        when 3 then $scope.tmpQuarterTxt = "3rd"
+        when 4 then $scope.tmpQuarterTxt = "4th"
+        when 5 then $scope.tmpQuarterTxt = "OVT"
+       $scope.tmpQuarterTxt
+      
+      
       
     $scope.$watch('enteredQuarter', -> (
       unless 5 >= $scope.enteredQuarter >= 0
@@ -470,7 +484,10 @@ class Team extends DataElement
       {value: 'K', text: 'Kicker', type: 3}
       {value: 'ST', text: 'other Special', type: 3}
     ]; 
-    
+    $scope.getTeamNameLong = ->
+      $scope.model.teamNameLong
+    $scope.getTeamNameShort = ->
+      $scope.model.teamNameShort
     
     $scope.showPositions = (player) ->
       selected = [];
@@ -523,8 +540,12 @@ class Team extends DataElement
 
 class HomeTeam extends Team
   key: "HomeTeam"
+  constructor:  ($scope) ->
+    super $scope
 class GuestTeam extends Team
   key: "GuestTeam"
+  constructor:  ($scope) ->
+    super $scope
   
 class TeamRouter
   constructor:  ($scope) ->
@@ -727,7 +748,9 @@ class LowerThirds extends DataElement
       players_home_bloodhound.initialize();
       players_guest_bloodhound.initialize();
 
-      
+    $scope.getPlayer = ->
+      $scope.model.Player
+    
     $scope.setPlayer = ->
       $scope.model.Player = $scope.tmpPlayer
       $scope.tmpPlayer = ""
@@ -811,6 +834,7 @@ class LowerThirds extends DataElement
         return $scope.model.GPcontent
       $scope.model.GPcontent.replace(/(?:\r\n|\r|\n)/g, '<br />')
       
+      
     
   
 class DataClass
@@ -849,7 +873,7 @@ class DataClass
   isDataEmpty: ->
     console.log Object.keys(@data).length
     Object.keys(@data).length is 0
-    
+  
 
     
     
@@ -903,6 +927,10 @@ class GameDataCtrl
       console.log "unregistering tick"
       data_k_v = {key: key, elem: elem}
       Socket.emit('unregisterTick', data_k_v)
+      
+    $scope.calcAge = (dateString) ->
+      birthday = +new Date(dateString);
+      return~~ ((Date.now() - birthday) / (31557600000));
       
     $scope.connectionLosses = 0
     $scope.connectedOld = false

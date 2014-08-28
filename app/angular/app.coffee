@@ -20,7 +20,7 @@ angular.module("myApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.di
   ]
 
 
-angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'textAngular', 'siyfion.sfTypeahead'])
+angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'textAngular', 'siyfion.sfTypeahead', 'ngAnimate'])
 .config ["$routeProvider",
   ($routeProvider) ->
     $routeProvider.when "/roster/:team", {templateUrl: "partials/manage/roster", controller: RosterController}

@@ -51,5 +51,6 @@ block managecontent
                         button.btn.btn-sm.btn-primary(ng-click="rowform.$show()") Edit
                         button.btn.btn-sm.btn-danger(ng-click="removePlayer(player)") Delete
                         button.btn.btn-sm.btn-info(ng-click="sendPlayer(player)") Send
-    +formElem ("Add a player", "")
-        button.add.btn.btn-primary(ng-click="addPlayer()") Add Player
+    div(ng-show="model.roster.length > 10")
+        +formElem ("Add a player", "")
+            button.add.btn.btn-primary(ng-click="addPlayer()") Add Player

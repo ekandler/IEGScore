@@ -1,0 +1,40 @@
+//- Load team controllers to be able to display team names
+div(ng-controller='HomeTeam')
+div(ng-controller='GuestTeam')
+div#scoreboardContainer(ng-controller='Scoreboard')
+    div#scoreboardSmall
+        div.animate-container.transition-faster.movein-top.moveout-top(ng-show="getScorebardVisibleSmall()")
+            div.distanceDown
+                div.transition-slow.fadein.fadeout(ng-hide="getDown() == 0")
+                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 1") 1st
+                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 2") 2nd
+                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 3") 3rd
+                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 4") 4th
+                    span  &amp; 
+                    span(ng-bind="getDistance()", ng-hide="getDistance() == 0")
+                    span(ng-show="getDistance() == 0") Goal
+            div.score
+                div.teamname.hometeam(ng-bind="getDataElem('HomeTeam').model.teamNameShort")
+                div.points.homepoints(ng-bind="getPoints(true)")
+                div.teamname.guestteam(ng-bind="getDataElem('GuestTeam').model.teamNameShort")
+                div.points.guestpoints(ng-bind="getPoints(false)")
+            div.timeouts
+                div.timeoutsHome(ng-show="getTimoutsHome() >= 0")
+                    div.timeoutPoint(ng-show="getTimoutsHome() == 0") x
+                    div.timeoutPoint(ng-show="getTimoutsHome() >= 1") -
+                    div.timeoutPoint(ng-show="getTimoutsHome() <= 1") x
+                    div.timeoutPoint(ng-show="getTimoutsHome() >= 2") -
+                    div.timeoutPoint(ng-show="getTimoutsHome() <= 2") x
+                    div.timeoutPoint(ng-show="getTimoutsHome() == 3") -
+                div.timeoutsGuests(ng-show="getTimoutsGuests() >= 0")
+                    div.timeoutPoint(ng-show="getTimoutsGuests() == 0") x
+                    div.timeoutPoint(ng-show="getTimoutsGuests() >= 1") -
+                    div.timeoutPoint(ng-show="getTimoutsGuests() <= 1") x
+                    div.timeoutPoint(ng-show="getTimoutsGuests() >= 2") -
+                    div.timeoutPoint(ng-show="getTimoutsGuests() <= 2") x
+                    div.timeoutPoint(ng-show="getTimoutsGuests() == 3") -
+    div#scoreboardBig
+        div.animate-container.transition-faster.movein-top.moveout-top(ng-show="getScorebardVisibleBig()")
+            | Big one
+            
+            

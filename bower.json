@@ -24,6 +24,7 @@
     "mousetrap": "~1.4.6",
     "textAngular": "~1.2.2",
     "font-awesome": "~4.1.0",
-    "angular-typeahead": "~0.2.1"
+    "angular-typeahead": "~0.2.1",
+    "angular-animate": "~1.2.23"
   }
 }

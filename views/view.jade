@@ -4,6 +4,9 @@ block head
   - var ngApp = 'ScoreApp'
 
 block content
-    p Check for alpha!
-    div(ng-controller='GameDataCtrl')
-        div(ng-include="'/partials/view/clock'")
+    div#tvArea
+        div(ng-controller='GameDataCtrl')
+            div(ng-include="'/partials/view/clock'")
+            div(ng-include="'/partials/view/scoreboard'")
+    div#outOfTVRight AREA OFF SCREEN
+    div#outOfTVBottom AREA OFF SCREEN

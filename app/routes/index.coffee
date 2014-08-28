@@ -21,3 +21,6 @@ exports.manage = (request, response) ->
   
 exports.view = (request, response) ->
   response.render "view"
+  
+exports.overview = (request, response) ->
+  response.render "overview"

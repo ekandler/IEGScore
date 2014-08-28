@@ -1,0 +1,205 @@
+extends layout
+
+block head
+  - var ngApp = 'ScoreApp'
+
+block content
+    div(ng-controller='GameDataCtrl')
+        div.container-fluid
+            div.row(style="font-size:15px")
+                div.col-lg-3.col-md-6.condensedcolumn
+                    div(ng-controller='GameClock')
+                        div.panel.panel-default.condensedpanel.overview-fullheight
+                            div.panel-heading Game clock 
+                                span.label.label-danger(ng-show="getClockVisible()") On Air
+                                span.label.label-default(ng-hide="getClockVisible()") invisble
+                            ul.list-group.inline
+                                li.list-group-item.inline
+                                    span(style="font-size: xx-large; text-shadow: grey 1px 1px", ng-bind="getTime()")  
+                                    span   
+                                    span.label.label-danger(ng-show="getClockRunning()") running
+                                    span.label.label-default(ng-hide="getClockRunning()") not running
+                                    br
+                                    span.label.label-default(ng-show="getInfo() == 0") no additional info
+                                    span.label.label-warning(ng-show="getInfo() == 1") Flag
+                                    span.label.label-info(ng-show="getInfo() == 2") Timeout Home
+                                    span.label.label-info(ng-show="getInfo() == 3") Timeout Guests
+                                    span.label.label-info(ng-show="getInfo() == 4") Timeout Officials
+                                li.list-group-item.inline Quarter:  
+                                    span.label.label-default(ng-show="getQuarter() == 0") unknown/hidden
+                                    span.label.label-primary(ng-show="getQuarter() == 1") 1st
+                                    span.label.label-primary(ng-show="getQuarter() == 2") 2nd
+                                    span.label.label-primary(ng-show="getQuarter() == 3") 3rd
+                                    span.label.label-primary(ng-show="getQuarter() == 4") 4th
+                                    span.label.label-primary(ng-show="getQuarter() == 5") Overtime
+                div.col-lg-3.col-md-6.condensedcolumn
+                    div(ng-controller='Scoreboard')
+                        div.panel.panel-default.condensedpanel.overview-fullheight
+                            div.panel-heading Scoreboard 
+                                span.label.label-warning(ng-show="getScorebardVisibleSmall()") Small Scoreboard On Air
+                                span.label.label-danger(ng-show="getScorebardVisibleBig()") Big Scoreboard On Air
+                                span.label.label-default(ng-hide="getScorebardVisibleSmall() || getScorebardVisibleBig()") invisble
+                            ul.list-group.inline
+                                li.list-group-item
+                                    span Points: 
+                                    span.label.label-primary(ng-bind="getDataElem('HomeTeam').model.teamNameShort || 'Home'")
+                                    span  
+                                    span(style="font-size: xx-large; text-shadow: grey 1px 1px", ng-bind="getPoints(true) + ' : ' + getPoints(false)")  
+                                    span  
+                                    span.label.label-primary(ng-bind="getDataElem('GuestTeam').model.teamNameShort || 'Guests'")
+                                li.list-group-item
+                                    span Timeouts left: 
+                                    span  
+                                    span.label.label-primary(ng-bind="getTimoutsHome() + ' : ' + getTimoutsGuests(false)")  
+                                    span  |  
+                                    span Offense: 
+                                    span.label.label-primary(ng-bind="getDataElem(getBallPossession() ? 'HomeTeam' : 'GuestTeam').model.teamNameShort") 
+                                li.list-group-item
+                                    span Distance/Down: 
+                                    span.label.label-default(ng-show="getDown() == 0") unknown/hidden
+                                    span.label.label-primary(ng-show="getDown() == 1") 1st
+                                    span.label.label-primary(ng-show="getDown() == 2") 2nd
+                                    span.label.label-primary(ng-show="getDown() == 3") 3rd
+                                    span.label.label-primary(ng-show="getDown() == 4") 4th
+                                    span  &amp;  
+                                    span.label.label-primary(ng-bind="getDistance()", ng-hide="getDistance() == 0")
+                                    span.label.label-primary(ng-show="getDistance() == 0") Goal
+                div(ng-controller='LowerThirds')
+                    div.col-lg-3.col-md-6.condensedcolumn
+                        div.panel.panel-default.condensedpanel.overview-halfheight
+                            div.panel-heading Referee Decision 
+                                span.label.label-danger(ng-show="getRefVisible()") On Air
+                                span.label.label-default(ng-hide="getRefVisible()") invisble
+                            ul.list-group.inline
+                                li.list-group-item
+                                    span(ng-bind="getRefContent().num + ' | ' + getRefContent().name", ng-show="getRefContent()")
+                                    span(ng-hide="getRefContent()") not set
+                        div.panel.panel-default.condensedpanel.overview-halfheight
+                            div.panel-heading General purpose insert 
+                                span.label.label-danger(ng-show="getGPVisible()") On Air
+                                span.label.label-default(ng-hide="getGPVisible()") invisble
+                            ul.list-group.inline
+                                li.list-group-item
+                                    span(ng-bind-html="getGPContent(true)")
+                    div.col-lg-3.col-md-6.condensedcolumn
+                        div.panel.panel-default.condensedpanel.overview-fullheight
+                            div.panel-heading Player insert 
+                                span.label.label-danger(ng-show="getPlayerVisbileSmall()") On Air
+                                span.label.label-danger(ng-show="getPlayerVisbileLarge()") Detailed On Air
+                                span.label.label-default(ng-hide="getPlayerVisbileSmall() || getPlayerVisbileLarge()") invisble
+                            ul.list-group.inline(ng-hide="getPlayer()")
+                                li.list-group-item
+                                    span not set
+                            ul.list-group.inline(ng-show="getPlayer()")
+                                li.list-group-item
+                                    span Team: 
+                                    span(ng-bind="getDataElem(getPlayer().team).model.teamNameShort || getPlayer().team")
+                                li.list-group-item
+                                    span Player: 
+                                    span(ng-bind="getPlayer().name")
+                                    span  
+                                    span.label.label-primary(ng-bind="'# ' + getPlayer().number", ng-show="getPlayer().number")
+                                li.list-group-item
+                                    span Info: 
+                                    span.label.label-primary(ng-bind="'pos: ' + getPlayer().position.join()", ng-show="getPlayer().position")
+                                    span  
+                                    span.label.label-primary(ng-bind="'age: ' + calcAge(getPlayer().dob)", ng-show="getPlayer().dob")
+                                    span  
+                                    span.label.label-primary(ng-bind="getPlayer().size + ' cm'", ng-show="getPlayer().size")
+                                    span  
+                                    span.label.label-primary(ng-bind="getPlayer().weight + ' kg'", ng-show="getPlayer().weight")
+                                    span  
+                                    span.label.label-primary(ng-bind="'exp: ' + getPlayer().exp + ' yrs'", ng-show="getPlayer().exp")
+                                    span  
+                                    span.label.label-primary(ng-bind="'nat: ' + getPlayer().nat", ng-show="getPlayer().nat")
+            div.row
+                div.col-lg-6.condensedcolumn(ng-controller='HomeTeam')
+                    div.panel.panel-default.condensedpanel
+                        div.panel-heading Roster 
+                            span(ng-bind="getTeamNameLong() || 'Home team'")
+                            span  
+                            span(ng-bind="'(' + getTeamNameShort() + ')'", ng-show="getTeamNameShort()")
+                        ul.list-group.inline
+                            li(style="padding-bottom:0px; padding-top:0px").list-group-item
+                                div.row
+                                    div.col-lg-6.condensedcolumn
+                                        table.table.reallyCondensed(style="margin-bottom:0px")
+                                            tr
+                                                th #
+                                                th Name
+                                                th Age
+                                                th Size
+                                                th Wgh
+                                                th Exp
+                                                th(style="border-right: solid black;") Nat
+                                            tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index < model.roster.length/2")
+                                                td: span {{ player.number || '' }}
+                                                td: span {{ player.name || '' }}
+                                                td: span {{ calcAge(player.dob) || '' }}
+                                                td: span {{ player.size || '' }}
+                                                td: span {{ player.weight || '' }}
+                                                td: span {{ player.exp || '' }}
+                                                td(style="border-right: solid black;"): span {{ player.nat || '' }} 
+                                    div.table-responsive.col-lg-6.condensedcolumn
+                                        table.table.reallyCondensed(style="margin-bottom:0px")
+                                            tr
+                                                th #
+                                                th Name
+                                                th Age
+                                                th Size
+                                                th Wgh
+                                                th Exp
+                                                th Nat
+                                            tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index >= model.roster.length/2")
+                                                td: span {{ player.number || '' }}
+                                                td: span {{ player.name || '' }}
+                                                td: span {{ calcAge(player.dob) || '' }}
+                                                td: span {{ player.size || '' }}
+                                                td: span {{ player.weight || '' }}
+                                                td: span {{ player.exp || '' }}
+                                                td: span {{ player.nat || '' }} 
+                div.col-lg-6.condensedcolumn(ng-controller='GuestTeam')
+                    div.panel.panel-default.condensedpanel
+                        div.panel-heading Roster 
+                            span(ng-bind="getTeamNameLong() || 'Guest team'")
+                            span  
+                            span(ng-bind="'(' + getTeamNameShort() + ')'", ng-show="getTeamNameShort()")
+                        ul.list-group.inline
+                            li(style="padding-bottom:0px; padding-top:0px").list-group-item
+                                div.row
+                                    div.col-lg-6.condensedcolumn
+                                        table.table.reallyCondensed(style="margin-bottom:0px")
+                                            tr
+                                                th #
+                                                th Name
+                                                th Age
+                                                th Size
+                                                th Wgh
+                                                th Exp
+                                                th(style="border-right: solid black;") Nat
+                                            tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index < model.roster.length/2")
+                                                td: span {{ player.number || '' }}
+                                                td: span {{ player.name || '' }}
+                                                td: span {{ calcAge(player.dob) || '' }}
+                                                td: span {{ player.size || '' }}
+                                                td: span {{ player.weight || '' }}
+                                                td: span {{ player.exp || '' }}
+                                                td(style="border-right: solid black;"): span {{ player.nat || '' }} 
+                                    div.table-responsive.col-lg-6.condensedcolumn
+                                        table.table.reallyCondensed(style="margin-bottom:0px")
+                                            tr
+                                                th #
+                                                th Name
+                                                th Age
+                                                th Size
+                                                th Wgh
+                                                th Exp
+                                                th Nat
+                                            tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index >= model.roster.length/2")
+                                                td: span {{ player.number || '' }}
+                                                td: span {{ player.name || '' }}
+                                                td: span {{ calcAge(player.dob) || '' }}
+                                                td: span {{ player.size || '' }}
+                                                td: span {{ player.weight || '' }}
+                                                td: span {{ player.exp || '' }}
+                                                td: span {{ player.nat || '' }} 

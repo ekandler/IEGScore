@@ -1,5 +1,14 @@
-div(ng-controller='GameClock')
-    div(ng-show="getClockVisible()")
-        div Current Time
-        div(ng-bind="getTime()")
-        
+div#gameClock(ng-controller='GameClock')
+    div.animate-container.movein-top.moveout-top.transition-faster(ng-show="getClockVisible()")
+        div.info
+            div.transition-slow.moveinfo.flag(ng-show="getInfo() == 1") Flag
+            div.transition-slow.moveinfo(ng-show="getInfo() == 2") Timeout Home
+            div.transition-slow.moveinfo(ng-show="getInfo() == 3") Timeout Guests
+            div.transition-slow.moveinfo(ng-show="getInfo() == 4") Timeout Officials
+        div.quarter
+            div.transition-slow.fadein.fadeout(ng-show="getQuarter() == 1") 1st
+            div.transition-slow.fadein.fadeout(ng-show="getQuarter() == 2") 2nd
+            div.transition-slow.fadein.fadeout(ng-show="getQuarter() == 3") 3rd
+            div.transition-slow.fadein.fadeout(ng-show="getQuarter() == 4") 4th
+            div.transition-slow.fadein.fadeout(ng-show="getQuarter() == 5") OVT
+        div.time(ng-bind="getTime()")
