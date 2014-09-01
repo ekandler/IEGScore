@@ -1,0 +1,16 @@
+extends layout
+
+block head
+  - var ngApp = 'ScoreApp'
+
+block content
+    div(ng-controller='GameDataCtrl')
+        div.container-fluid
+            div(ng-controller='GameClock')
+                div.row(style="font-size:40px; line-height: 1em")
+                    div.col-lg-12.condensedcolumn
+                        span(ng-bind="getTime()")
+                div.row(style="font-size:40px; line-height: 1em")
+                    div.col-lg-12.condensedcolumn
+                        button.btn.btn-danger(ng-click="toggleClockRunning()", ng-show="getClockRunning()") Stop
+                        button.btn.btn-success(ng-click="toggleClockRunning()", ng-hide="getClockRunning()") Start

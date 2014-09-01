@@ -92,16 +92,17 @@ class DataElement
       json = JSON.stringify($scope.model)
       return new Blob([json], {type: "application/json"})
       
+    $scope.updateModelAfterUpload = ->
+      $scope.update()
+      
     $scope.getFile =  ->
       reader = new FileReader()
       reader.onload = ->
-        #TODO add some security
+        #TODO add some security #FIXME hometeam guest team does not get updted
         text = reader.result
         newmodel = JSON.parse(text)
         $scope.model = newmodel
-        $scope.update()
-        
-        
+        $scope.updateModelAfterUpload()
       reader.readAsText($scope.file);
       
       
@@ -502,7 +503,11 @@ class Team extends DataElement
           'Not set'
       catch error
         'Not set'
-      
+        
+    $scope.updateModelAfterUpload = ->
+      for player in $scope.model.roster # update team parameter
+        player.team = $scope.key
+      $scope.update()
       
     $scope.addPlayer = ->
       $scope.inserted = {

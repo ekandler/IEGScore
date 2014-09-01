@@ -24,3 +24,6 @@ exports.view = (request, response) ->
   
 exports.overview = (request, response) ->
   response.render "overview"
+  
+exports.smartwatch = (request, response) ->
+  response.render "smartwatch"

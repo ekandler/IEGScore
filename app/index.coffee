@@ -38,6 +38,7 @@ app.get "/partials/:dir/:name", routes.partialdirs
 app.get "/manage", routes.manage
 app.get "/view", routes.view
 app.get "/overview", routes.overview
+app.get "/smartwatch", routes.smartwatch
 
 
 # Services

@@ -50,12 +50,13 @@ block content
                                 li.list-group-item
                                     span Timeouts left: 
                                     span  
-                                    span.label.label-primary(ng-bind="getTimoutsHome() + ' : ' + getTimoutsGuests(false)")  
+                                    span.label.label-primary(ng-bind="getTimoutsHome() + ' : ' + getTimoutsGuests()", ng-hide="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)")  
+                                    span.label.label-default(ng-show="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)") unknown/hidden
                                     span  |  
                                     span Offense: 
-                                    span.label.label-primary(ng-bind="getDataElem(getBallPossession() ? 'HomeTeam' : 'GuestTeam').model.teamNameShort") 
+                                    span.label.label-primary(ng-bind="getBallPossession() ? (getDataElem('HomeTeam').model.teamNameShort || 'Home') : (getDataElem('GuestTeam').model.teamNameShort || 'Guests')") 
                                 li.list-group-item
-                                    span Distance/Down: 
+                                    span Down/Distance: 
                                     span.label.label-default(ng-show="getDown() == 0") unknown/hidden
                                     span.label.label-primary(ng-show="getDown() == 1") 1st
                                     span.label.label-primary(ng-show="getDown() == 2") 2nd
@@ -113,7 +114,7 @@ block content
                                     span  
                                     span.label.label-primary(ng-bind="'nat: ' + getPlayer().nat", ng-show="getPlayer().nat")
             div.row
-                div.col-lg-6.condensedcolumn(ng-controller='HomeTeam')
+                div.col-lg-6.col-md-6.condensedcolumn(ng-controller='HomeTeam')
                     div.panel.panel-default.condensedpanel
                         div.panel-heading Roster 
                             span(ng-bind="getTeamNameLong() || 'Home team'")
@@ -158,7 +159,7 @@ block content
                                                 td: span {{ player.weight || '' }}
                                                 td: span {{ player.exp || '' }}
                                                 td: span {{ player.nat || '' }} 
-                div.col-lg-6.condensedcolumn(ng-controller='GuestTeam')
+                div.col-lg-6.col-md-6.condensedcolumn(ng-controller='GuestTeam')
                     div.panel.panel-default.condensedpanel
                         div.panel-heading Roster 
                             span(ng-bind="getTeamNameLong() || 'Guest team'")
