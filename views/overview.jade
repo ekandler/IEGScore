@@ -22,8 +22,8 @@ block content
                                     br
                                     span.label.label-default(ng-show="getInfo() == 0") no additional info
                                     span.label.label-warning(ng-show="getInfo() == 1") Flag
-                                    span.label.label-info(ng-show="getInfo() == 2") Timeout Home
-                                    span.label.label-info(ng-show="getInfo() == 3") Timeout Guests
+                                    span.label.label-info(ng-show="getInfo() == 2") Timeout {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}
+                                    span.label.label-info(ng-show="getInfo() == 3") Timeout {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
                                     span.label.label-info(ng-show="getInfo() == 4") Timeout Officials
                                 li.list-group-item.inline Quarter:  
                                     span.label.label-default(ng-show="getQuarter() == 0") unknown/hidden
@@ -48,13 +48,15 @@ block content
                                     span  
                                     span.label.label-primary(ng-bind="getDataElem('GuestTeam').model.teamNameShort || 'Guests'")
                                 li.list-group-item
-                                    span Timeouts left: 
-                                    span  
-                                    span.label.label-primary(ng-bind="getTimoutsHome() + ' : ' + getTimoutsGuests()", ng-hide="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)")  
-                                    span.label.label-default(ng-show="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)") unknown/hidden
-                                    span  |  
-                                    span Offense: 
-                                    span.label.label-primary(ng-bind="getBallPossession() ? (getDataElem('HomeTeam').model.teamNameShort || 'Home') : (getDataElem('GuestTeam').model.teamNameShort || 'Guests')") 
+                                    div.row
+                                        div.col-md-6
+                                            span Timeouts left: 
+                                            span  
+                                            span.label.label-primary(ng-bind="getTimoutsHome() + ' : ' + getTimoutsGuests()", ng-hide="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)")  
+                                            span.label.label-default(ng-show="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)") unknown
+                                        div.col-md-6
+                                            span Offense: 
+                                            span.label.label-primary(ng-bind="getBallPossession() ? (getDataElem('HomeTeam').model.teamNameShort || 'Home') : (getDataElem('GuestTeam').model.teamNameShort || 'Guests')") 
                                 li.list-group-item
                                     span Down/Distance: 
                                     span.label.label-default(ng-show="getDown() == 0") unknown/hidden
@@ -125,9 +127,10 @@ block content
                                 div.row
                                     div.col-lg-6.condensedcolumn
                                         table.table.reallyCondensed(style="margin-bottom:0px")
-                                            tr
+                                            tr(style="font-size:x-small")
                                                 th #
                                                 th Name
+                                                th Pos
                                                 th Age
                                                 th Size
                                                 th Wgh
@@ -136,16 +139,18 @@ block content
                                             tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index < model.roster.length/2")
                                                 td: span {{ player.number || '' }}
                                                 td: span {{ player.name || '' }}
-                                                td: span {{ calcAge(player.dob) || '' }}
-                                                td: span {{ player.size || '' }}
-                                                td: span {{ player.weight || '' }}
-                                                td: span {{ player.exp || '' }}
-                                                td(style="border-right: solid black;"): span {{ player.nat || '' }} 
+                                                td(style="font-size:x-small"): span {{ player.position.join() || '' }}
+                                                td(style="font-size:x-small"): span {{ player.dob ? calcAge(player.dob) : '' }}
+                                                td(style="font-size:x-small"): span {{ player.size || '' }}
+                                                td(style="font-size:x-small"): span {{ player.weight || '' }}
+                                                td(style="font-size:x-small"): span {{ player.exp || '' }}
+                                                td(style="font-size:x-small; border-right: solid black;"): span {{ player.nat || '' }} 
                                     div.table-responsive.col-lg-6.condensedcolumn
                                         table.table.reallyCondensed(style="margin-bottom:0px")
-                                            tr
+                                            tr(style="font-size:x-small")
                                                 th #
                                                 th Name
+                                                th Pos
                                                 th Age
                                                 th Size
                                                 th Wgh
@@ -154,11 +159,12 @@ block content
                                             tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index >= model.roster.length/2")
                                                 td: span {{ player.number || '' }}
                                                 td: span {{ player.name || '' }}
-                                                td: span {{ calcAge(player.dob) || '' }}
-                                                td: span {{ player.size || '' }}
-                                                td: span {{ player.weight || '' }}
-                                                td: span {{ player.exp || '' }}
-                                                td: span {{ player.nat || '' }} 
+                                                td(style="font-size:x-small"): span {{ player.position.join() || '' }}
+                                                td(style="font-size:x-small"): span {{ player.dob ? calcAge(player.dob) : '' }}
+                                                td(style="font-size:x-small"): span {{ player.size || '' }}
+                                                td(style="font-size:x-small"): span {{ player.weight || '' }}
+                                                td(style="font-size:x-small"): span {{ player.exp || '' }}
+                                                td(style="font-size:x-small"): span {{ player.nat || '' }} 
                 div.col-lg-6.col-md-6.condensedcolumn(ng-controller='GuestTeam')
                     div.panel.panel-default.condensedpanel
                         div.panel-heading Roster 
@@ -170,9 +176,10 @@ block content
                                 div.row
                                     div.col-lg-6.condensedcolumn
                                         table.table.reallyCondensed(style="margin-bottom:0px")
-                                            tr
+                                            tr(style="font-size:x-small")
                                                 th #
                                                 th Name
+                                                th Pos
                                                 th Age
                                                 th Size
                                                 th Wgh
@@ -181,16 +188,18 @@ block content
                                             tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index < model.roster.length/2")
                                                 td: span {{ player.number || '' }}
                                                 td: span {{ player.name || '' }}
-                                                td: span {{ calcAge(player.dob) || '' }}
-                                                td: span {{ player.size || '' }}
-                                                td: span {{ player.weight || '' }}
-                                                td: span {{ player.exp || '' }}
-                                                td(style="border-right: solid black;"): span {{ player.nat || '' }} 
+                                                td(style="font-size:x-small"): span {{ player.position.join() || '' }}
+                                                td(style="font-size:x-small"): span {{ player.dob ? calcAge(player.dob) : '' }}
+                                                td(style="font-size:x-small"): span {{ player.size || '' }}
+                                                td(style="font-size:x-small"): span {{ player.weight || '' }}
+                                                td(style="font-size:x-small"): span {{ player.exp || '' }}
+                                                td(style="font-size:x-small; border-right: solid black;"): span {{ player.nat || '' }} 
                                     div.table-responsive.col-lg-6.condensedcolumn
                                         table.table.reallyCondensed(style="margin-bottom:0px")
-                                            tr
+                                            tr(style="font-size:x-small")
                                                 th #
                                                 th Name
+                                                th Pos
                                                 th Age
                                                 th Size
                                                 th Wgh
@@ -199,8 +208,9 @@ block content
                                             tr(ng-repeat="player in model.roster | orderBy:'number'", ng-show="$index >= model.roster.length/2")
                                                 td: span {{ player.number || '' }}
                                                 td: span {{ player.name || '' }}
-                                                td: span {{ calcAge(player.dob) || '' }}
-                                                td: span {{ player.size || '' }}
-                                                td: span {{ player.weight || '' }}
-                                                td: span {{ player.exp || '' }}
-                                                td: span {{ player.nat || '' }} 
+                                                td(style="font-size:x-small"): span {{ player.position.join() || '' }}
+                                                td(style="font-size:x-small"): span {{ player.dob ? calcAge(player.dob) : '' }}
+                                                td(style="font-size:x-small"): span {{ player.size || '' }}
+                                                td(style="font-size:x-small"): span {{ player.weight || '' }}
+                                                td(style="font-size:x-small"): span {{ player.exp || '' }}
+                                                td(style="font-size:x-small"): span {{ player.nat || '' }} 

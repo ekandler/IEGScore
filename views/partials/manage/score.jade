@@ -46,24 +46,24 @@ block managecontent
                 button.btn.btn-warning(ng-click="showScoreboardBig()", ng-class="{ active: !getScorebardVisibleBig(), disabled: getScorebardVisibleBig() }") Full
                 button.btn.btn-danger(ng-click="hideScoreboard()", ng-class="{ active: getScorebardVisibleSmall() || getScorebardVisibleBig(), disabled: !(getScorebardVisibleSmall() || getScorebardVisibleBig())}") Hide
         
-        +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "Home", "Guests")
-            | Offense: {{ getBallPossession() ? "Home" : "Guests" }}
+        +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "{{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}", "{{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}")
+            | Offense: {{ getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
             br
-            | Defense: {{ !getBallPossession() ? "Home" : "Guests" }}
+            | Defense: {{ !getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
         +formElem ("Total Points", "getPoints(true) + ':' + getPoints(false)", true)
             div.input-group
-                span.input-group-addon.control-label Home
+                span.input-group-addon.control-label {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}
                 input.form-control.form-score(ng-model="tmpHomePoints", select-on-click)
-                span.input-group-addon.control-label Guests
+                span.input-group-addon.control-label {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
                 input.form-control.form-score(ng-model="tmpGuestPoints", select-on-click)
                 span.input-group-btn
                     button.btn.btn-default(ng-click="setPoints()") Set
         
-        +points("Points Home", true)
-        +points("Points Guests", false)
+        +points("Points {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}", true)
+        +points("Points {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}", false)
         
-        +incDecVal("getTimoutsHome()", "setTimoutsHome()", "setTimoutsHome(getTimoutsHome()+1)", "setTimoutsHome(getTimoutsHome()-1)", "enteredTimeoutsHome", "Timeouts Home")
-        +incDecVal("getTimoutsGuests()", "setTimoutsGuests()", "setTimoutsGuests(getTimoutsGuests()+1)", "setTimoutsGuests(getTimoutsGuests()-1)", "enteredTimeoutsGuests", "Timeouts Guests")
+        +incDecVal("getTimoutsHome()", "setTimoutsHome()", "setTimoutsHome(getTimoutsHome()+1)", "setTimoutsHome(getTimoutsHome()-1)", "enteredTimeoutsHome", "Timeouts {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}")
+        +incDecVal("getTimoutsGuests()", "setTimoutsGuests()", "setTimoutsGuests(getTimoutsGuests()+1)", "setTimoutsGuests(getTimoutsGuests()-1)", "enteredTimeoutsGuests", "Timeouts {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}")
             | Special values: -1 (unknown / hide)
             
 

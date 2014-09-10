@@ -2,8 +2,8 @@ div#gameClock(ng-controller='GameClock')
     div.animate-container.movein-top.moveout-top.transition-faster(ng-show="getClockVisible()")
         div.info
             div.transition-slow.moveinfo.flag(ng-show="getInfo() == 1") Flag
-            div.transition-slow.moveinfo(ng-show="getInfo() == 2") Timeout Home
-            div.transition-slow.moveinfo(ng-show="getInfo() == 3") Timeout Guests
+            div.transition-slow.moveinfo(ng-show="getInfo() == 2") Timeout {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}
+            div.transition-slow.moveinfo(ng-show="getInfo() == 3") Timeout {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
             div.transition-slow.moveinfo(ng-show="getInfo() == 4") Timeout Officials
         div.quarter
             div.transition-slow.fadein.fadeout(ng-show="getQuarter() == 1") 1st
