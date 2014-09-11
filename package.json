@@ -6,13 +6,7 @@
     "type": "git",
     "url": ""
   },
-  "author": "Erwin Kandler <e.kandler@gmail.com>",
-  "contributors": [
-    {
-      "name": "Erwin Kandler",
-      "email": "e.kandler@gmail.com"
-    }
-  ],
+  "author": "Erwin Kandler",
   "keywords": [
     "node",
     "express",

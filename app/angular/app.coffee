@@ -19,8 +19,8 @@ angular.module("myApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.di
     $routeProvider.otherwise {redirectTo: "/home"}
   ]
 
-
-angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'textAngular', 'siyfion.sfTypeahead', 'ngAnimate'])
+# textangular removed due to hot pixel in view
+angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'siyfion.sfTypeahead', 'ngAnimate'])
 .config ["$routeProvider",
   ($routeProvider) ->
     $routeProvider.when "/roster/:team", {templateUrl: "partials/manage/roster", controller: RosterController}

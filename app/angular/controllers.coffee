@@ -1,68 +1,105 @@
-"use strict"
 
-###
-  Controllers
-###
+class DataClass
+  data: []
+  @scope: null
 
-AppCtrl = ($scope) ->
-  $scope.name = "Espresso"
+  constructor: (scope) ->
+    DataClass.scope = scope
+    
+  
+  registerElem: (key, obj) ->
+    console.log "Element " + key + " registered"
+    @data[key] = obj
+    console.log @data
+    
+  recv: (key, value, callApply) ->
+    callApply ?= false
+    console.log "receiving " + key
+    #console.log value
+    #console.log @data[key]
+    try
+      model = @data[key].model
+      $.extend model, value
+      #if callApply
+      @data[key].refreshGUI()
+    catch error
+      console.error "error while receiving, probably the module that should receive data was not properly initialized"
+    
 
-AppCtrl.$inject = ["$scope"]
-
-
-UsersCtrl = ($scope, User) ->
-  $scope.loadUsers = ->
-    $scope.users = {}
-    User.list {}
-    , (data) ->
-      $scope.users = data.message
-
-UsersCtrl.$inject = ["$scope", "User"]
-
-UserDetailCtrl = ($scope, $routeParams, User) ->
-  $scope.user =
-    User.get {userId: $routeParams.userId}
-    , (data) ->
-      $scope.user = data.user
-
-UserDetailCtrl.$inject = ["$scope", "$routeParams", "User"]
-
-SocketCtrl = ($scope, Socket) ->
-
-  Socket.on "pong", (data) ->
-    $scope.response = data.data
-
-  $scope.ping = ->
-    Socket.emit("ping", {})
-
-SocketCtrl.$inject = ["$scope", "Socket"]
-
-
-RouteController = ($scope, $routeParams) ->
-  $scope.templateUrl = '/partials/manage/'+$routeParams.part
+  send: (obj) ->
+    DataClass.scope.sendDataElem(obj)
+    
+  getObj: (key) ->
+    @data[key]
+    
+  isDataEmpty: ->
+    console.log Object.keys(@data).length
+    Object.keys(@data).length is 0
   
 
-  
-  
-  console.log($scope.templateUrl)
- 
- 
-RosterController = ($scope, $routeParams) ->
-  $scope.team = $routeParams.team.toLowerCase()
-  
-  if $scope.team is "home"
-    new HomeTeam($scope)
-  else if $scope.team is "guests"
-    new GuestTeam($scope)
-  else
-    $scope.team = "---INVALID---"
-  
+class GameDataCtrl
 
-HeaderController = ($scope, $location) ->
-    $scope.isActive =  (viewLocation) ->
-        viewLocation is $location.path()
-
-
+  constructor: ($scope, Socket) ->
+    $scope.name = "Espresso"
+    $scope.data = new DataClass $scope
+    receivedPacket = false
+    
+    
+    Socket.on "data", (data_k_v) ->
+      if data_k_v is null
+        return
+      
+      # delay first packet, so the view can establish
+      #if not receivedPacket
+      #  receivedPacket = true
+      #  setTimeout ( ->
+      #    $scope.data.recv data_k_v.key, data_k_v.val, true
+      #  ), 200
+      #else
+      
+      #if not receivedPacket
+      #  receivedPacket = true
+      #  $scope.data.recv data_k_v.key, data_k_v.val
+      #else
+      
+      $scope.data.recv data_k_v.key, data_k_v.val
+      
+    $scope.sendDataElem = (obj) ->
+      data_k_v = {key: obj.key, val: obj.model}
+      Socket.emit("data", data_k_v)
+      
+    $scope.requestCurrentData =  (key) ->
+      data_k_v = {key: key, val: null}
+      Socket.emit("data", data_k_v)
+      
+    $scope.getDataElem = (obj) ->
+      $scope.data.getObj(obj)
+      
+    $scope.registerTick= (key, elem) ->
+      console.log "registering tick"
+      data_k_v = {key: key, elem: elem}
+      Socket.emit('registerTick', data_k_v)
+    
+    $scope.unregisterTick= (key, elem) ->
+      console.log "unregistering tick"
+      data_k_v = {key: key, elem: elem}
+      Socket.emit('unregisterTick', data_k_v)
+      
+    $scope.calcAge = (dateString) ->
+      birthday = +new Date(dateString);
+      return~~ ((Date.now() - birthday) / (31557600000));
+      
+    $scope.connectionLosses = 0
+    $scope.connectedOld = false
+    $scope.isConnected = ->
+      if Socket.isConnected()
+        $scope.connectedOld = true
+      if not Socket.isConnected() and $scope.connectedOld
+        $scope.connectionLosses += 1
+        $scope.connectedOld = false
+      Socket.isConnected()
+        
+      
 
 class DataElement
   key: "unkownElement"
@@ -275,291 +312,7 @@ class GameClock extends DataElement
       $scope.enteredQuarter = ''
       $scope.update()
       
-      
 
-  
-  
-class Scoreboard extends DataElement
-  key: "Scoreboard"
-  
-		
-  constructor:  ($scope) ->
-    super $scope
-    $scope.model = {
-      timeOutsHome: 3
-      timeOutsGuests: 3
-      pointsHome: 0
-      pointsGuests: 0
-      down: 0
-      distance: 10
-      posessionHome: true
-      visibleSmall: false
-      visibleBig: false
-    } 
-    
-    $scope.getBallPossession = ->
-      $scope.model.posessionHome
-      
-    $scope.toggleBallPossession = ->
-      if $scope.model.posessionHome
-        $scope.model.posessionHome = false
-      else
-        $scope.model.posessionHome = true
-      $scope.update()
-        
-    $scope.getScorebardVisibleSmall = ->
-      $scope.model.visibleSmall
-    $scope.getScorebardVisibleBig = ->
-      $scope.model.visibleBig
-      
-    $scope.showScoreboardSmall = ->
-      $scope.model.visibleSmall = true
-      $scope.model.visibleBig = false
-      $scope.update()
-    $scope.showScoreboardBig = ->
-      $scope.model.visibleSmall = false
-      $scope.model.visibleBig = true
-      $scope.update()
-    $scope.hideScoreboard = ->
-      $scope.model.visibleSmall = false
-      $scope.model.visibleBig = false
-      $scope.update()
-    
-        
-    $scope.getTimoutsHome = ->
-      $scope.model.timeOutsHome
-      
-    $scope.$watch('enteredTimeoutsHome', -> (
-      if  $scope.enteredTimeoutsHome is '-'
-        return
-      
-      unless 3 >= $scope.enteredTimeoutsHome >= -1
-        $scope.enteredTimeoutsHome = ''
-    ))
-    
-    $scope.setTimoutsHome = (nrTimeouts) ->
-      if nrTimeouts is undefined
-        if $scope.enteredTimeoutsHome
-          nrTimeouts = $scope.enteredTimeoutsHome
-        else
-          return false
-      
-      if 3 >= nrTimeouts >= -1
-        $scope.model.timeOutsHome = parseInt nrTimeouts
-      
-      $scope.enteredTimeoutsHome = ''
-      $scope.update()
-      
-    $scope.getTimoutsGuests = ->
-      $scope.model.timeOutsGuests
-      
-    $scope.$watch('enteredTimeoutsGuests', -> (
-      if  $scope.enteredTimeoutsGuests is '-'
-        return
-      
-      unless 3 >= $scope.enteredTimeoutsGuests >= -1
-        $scope.enteredTimeoutsGuests = ''
-    ))
-    
-    $scope.setTimoutsGuests = (nrTimeouts) ->
-      if nrTimeouts is undefined
-        if $scope.enteredTimeoutsGuests
-          nrTimeouts = $scope.enteredTimeoutsGuests
-        else
-          return false
-      
-      if 3 >= nrTimeouts >= -1
-        $scope.model.timeOutsGuests = parseInt nrTimeouts
-      
-      $scope.enteredTimeoutsGuests = ''
-      $scope.update()
-      
-    $scope.getPoints = (home) ->
-      if home
-        $scope.model.pointsHome
-      else
-        $scope.model.pointsGuests
-        
-    $scope.$watch('model.pointsHome', -> (
-      $scope.tmpHomePoints = $scope.model.pointsHome
-    ))
-    
-    $scope.$watch('model.pointsGuests', -> (
-      $scope.tmpGuestPoints = $scope.model.pointsGuests
-    ))
-    
-    $scope.$watch('tmpHomePoints', -> (
-      if isNaN($scope.tmpHomePoints) or parseInt($scope.tmpHomePoints) < 0
-        $scope.tmpHomePoints = $scope.model.pointsHome
-    ))
-    
-    $scope.$watch('tmpGuestPoints', -> (
-      if isNaN($scope.tmpGuestPoints) or parseInt($scope.tmpGuestPoints) < 0
-        $scope.tmpGuestPoints = $scope.model.pointsGuests
-    ))
-        
-    $scope.setPoints = (home, points) -> 
-      if home is undefined
-        if $scope.tmpHomePoints
-          $scope.setPoints true, parseInt $scope.tmpHomePoints
-        if $scope.tmpGuestPoints
-          $scope.setPoints false, parseInt $scope.tmpGuestPoints
-        return
-      
-      points = parseInt points
-      unless points > -1
-        return
-        
-      if home
-        $scope.model.pointsHome = points
-      else
-        $scope.model.pointsGuests = points
-        
-      $scope.update()
-      
-      
-    $scope.getDown = ->
-      $scope.model.down
-      
-    
-    $scope.setDown = (down) ->
-      if 4 >= down >= 0
-        $scope.model.down = parseInt down
-      $scope.update()
-      
-      
-    $scope.getDistance = ->
-      $scope.model.distance
-      
-    $scope.$watch('enteredDistance', -> (
-      unless 100 >= $scope.enteredDistance >= 0
-        $scope.enteredDistance = ''
-    ))
-    
-    $scope.setDistance = (distance) ->
-      if distance is undefined
-        if $scope.enteredDistance
-          distance = $scope.enteredDistance
-        else
-          distance = 10
-      
-      if 100 >= distance >= 0
-        $scope.model.distance = parseInt distance
-      
-      $scope.enteredDistance = ''
-      $scope.update()
-        
-class Team extends DataElement
-  key: "unknownTeam"
-		
-  constructor:  ($scope) ->
-    super $scope
-    $scope.model = {
-      teamNameLong: null
-      teamNameShort: null
-      roster: []
-    } 
-    
-    # Types:
-    # 0: Coach/coordinator
-    # 1: Offense
-    # 2: Defense
-    # 3: Special Team
-    $scope.positions = [
-      {value: 'HC', text: 'Headcoach', type: 0}
-      {value: 'OC', text: 'Offense Coordinator', type: 0}
-      {value: 'DC', text: 'Defense Coordinator', type: 0}
-      {value: 'SC', text: 'Special Coordinator', type: 0}
-      
-      {value: 'OL', text: 'Offensive Line', type: 1}
-      {value: 'QB', text: 'Quarterback', type: 1}
-      {value: 'RB', text: 'Runningback', type: 1}
-      {value: 'WR', text: 'Wide Receiver', type: 1}
-      {value: 'TE', text: 'Tight End', type: 1}
-      
-      {value: 'DL', text: 'Defensive Line', type: 2}
-      {value: 'LB', text: 'Linebacker', type: 2}
-      {value: 'DB', text: 'Defensive Back', type: 2}
-      
-      {value: 'P', text: 'Punter', type: 3}
-      {value: 'K', text: 'Kicker', type: 3}
-      {value: 'ST', text: 'other Special', type: 3}
-    ]; 
-    $scope.getTeamNameLong = ->
-      $scope.model.teamNameLong
-    $scope.getTeamNameShort = ->
-      $scope.model.teamNameShort
-    
-    $scope.showPositions = (player) ->
-      selected = [];
-      try
-        angular.forEach($scope.positions, (s) -> 
-          if (player.position.indexOf(s.value) >= 0) 
-            selected.push(s.text);
-        )
-        if selected.length
-          selected.join(', ')
-        else
-          'Not set'
-      catch error
-        'Not set'
-        
-    $scope.updateModelAfterUpload = ->
-      for player in $scope.model.roster # update team parameter
-        player.team = $scope.key
-      $scope.update()
-      
-    $scope.addPlayer = ->
-      $scope.inserted = {
-        id: $scope.model.roster.length+1
-        number: null
-        name: ''
-        position: null
-        dob: null
-        size: null
-        weight: null
-        exp: null
-        nat: "AT"
-        team: $scope.key
-      }
-      $scope.model.roster.push($scope.inserted)
-      
-    $scope.predicate = 'number';
-      
-    $scope.removePlayer = (item) ->
-      #$scope.model.roster.splice(index, 1)
-      $scope.model.roster.splice($scope.model.roster.indexOf(item),1);
-      $scope.update()
-      
-    $scope.sendPlayer = (player) ->
-      $scope.getDataElem("LowerThirds").model.Player = player
-      $scope.getDataElem("LowerThirds").update()
-      location = "/#lower-thirds";
-      true
-      
-    $scope.checkName = (data, id) ->
-      if data is ""
-        return "Empty name not allowed"
-        
-    
-
-class HomeTeam extends Team
-  key: "HomeTeam"
-  constructor:  ($scope) ->
-    super $scope
-class GuestTeam extends Team
-  key: "GuestTeam"
-  constructor:  ($scope) ->
-    super $scope
-  
-class TeamRouter
-  constructor:  ($scope) ->
-    console.log $scope.team
-    if $scope.team is "home"
-      new HomeTeam($scope)
-    else
-      new GuestTeam($scope)
-      
       
 class LowerThirds extends DataElement
   key: "LowerThirds"
@@ -839,117 +592,323 @@ class LowerThirds extends DataElement
         return $scope.model.GPcontent
       $scope.model.GPcontent.replace(/(?:\r\n|\r|\n)/g, '<br />')
       
+
+class Scoreboard extends DataElement
+  key: "Scoreboard"
+  
+		
+  constructor:  ($scope) ->
+    super $scope
+    $scope.model = {
+      timeOutsHome: 3
+      timeOutsGuests: 3
+      pointsHome: 0
+      pointsGuests: 0
+      down: 0
+      distance: 10
+      posessionHome: true
+      visibleSmall: false
+      visibleBig: false
+    } 
+    
+    $scope.getBallPossession = ->
+      $scope.model.posessionHome
       
+    $scope.toggleBallPossession = ->
+      if $scope.model.posessionHome
+        $scope.model.posessionHome = false
+      else
+        $scope.model.posessionHome = true
+      $scope.update()
+        
+    $scope.getScorebardVisibleSmall = ->
+      $scope.model.visibleSmall
+    $scope.getScorebardVisibleBig = ->
+      $scope.model.visibleBig
+      
+    $scope.showScoreboardSmall = ->
+      $scope.model.visibleSmall = true
+      $scope.model.visibleBig = false
+      $scope.update()
+    $scope.showScoreboardBig = ->
+      $scope.model.visibleSmall = false
+      $scope.model.visibleBig = true
+      $scope.update()
+    $scope.hideScoreboard = ->
+      $scope.model.visibleSmall = false
+      $scope.model.visibleBig = false
+      $scope.update()
     
-  
-class DataClass
-  data: []
-  @scope: null
-
-  constructor: (scope) ->
-    DataClass.scope = scope
-    
-  
-  registerElem: (key, obj) ->
-    console.log "Element " + key + " registered"
-    @data[key] = obj
-    console.log @data
-    
-  recv: (key, value, callApply) ->
-    callApply ?= false
-    console.log "receiving " + key
-    #console.log value
-    #console.log @data[key]
-    try
-      model = @data[key].model
-      $.extend model, value
-      #if callApply
-      @data[key].refreshGUI()
-    catch error
-      console.error "error while receiving, probably the module that should receive data was not properly initialized"
-    
-
-  send: (obj) ->
-    DataClass.scope.sendDataElem(obj)
-    
-  getObj: (key) ->
-    @data[key]
-    
-  isDataEmpty: ->
-    console.log Object.keys(@data).length
-    Object.keys(@data).length is 0
-  
-
-    
-    
-
-    
-    
-class GameDataCtrl
-
-  constructor: ($scope, Socket) ->
-    $scope.name = "Espresso"
-    $scope.data = new DataClass $scope
-    receivedPacket = false
-    
-    
-    Socket.on "data", (data_k_v) ->
-      if data_k_v is null
+        
+    $scope.getTimoutsHome = ->
+      $scope.model.timeOutsHome
+      
+    $scope.$watch('enteredTimeoutsHome', -> (
+      if  $scope.enteredTimeoutsHome is '-'
         return
       
-      # delay first packet, so the view can establish
-      #if not receivedPacket
-      #  receivedPacket = true
-      #  setTimeout ( ->
-      #    $scope.data.recv data_k_v.key, data_k_v.val, true
-      #  ), 200
-      #else
-      
-      #if not receivedPacket
-      #  receivedPacket = true
-      #  $scope.data.recv data_k_v.key, data_k_v.val
-      #else
-      
-      $scope.data.recv data_k_v.key, data_k_v.val
-      
-    $scope.sendDataElem = (obj) ->
-      data_k_v = {key: obj.key, val: obj.model}
-      Socket.emit("data", data_k_v)
-      
-    $scope.requestCurrentData =  (key) ->
-      data_k_v = {key: key, val: null}
-      Socket.emit("data", data_k_v)
-      
-    $scope.getDataElem = (obj) ->
-      $scope.data.getObj(obj)
-      
-    $scope.registerTick= (key, elem) ->
-      console.log "registering tick"
-      data_k_v = {key: key, elem: elem}
-      Socket.emit('registerTick', data_k_v)
+      unless 3 >= $scope.enteredTimeoutsHome >= -1
+        $scope.enteredTimeoutsHome = ''
+    ))
     
-    $scope.unregisterTick= (key, elem) ->
-      console.log "unregistering tick"
-      data_k_v = {key: key, elem: elem}
-      Socket.emit('unregisterTick', data_k_v)
+    $scope.setTimoutsHome = (nrTimeouts) ->
+      if nrTimeouts is undefined
+        if $scope.enteredTimeoutsHome
+          nrTimeouts = $scope.enteredTimeoutsHome
+        else
+          return false
       
-    $scope.calcAge = (dateString) ->
-      birthday = +new Date(dateString);
-      return~~ ((Date.now() - birthday) / (31557600000));
+      if 3 >= nrTimeouts >= -1
+        $scope.model.timeOutsHome = parseInt nrTimeouts
       
-    $scope.connectionLosses = 0
-    $scope.connectedOld = false
-    $scope.isConnected = ->
-      if Socket.isConnected()
-        $scope.connectedOld = true
-      if not Socket.isConnected() and $scope.connectedOld
-        $scope.connectionLosses += 1
-        $scope.connectedOld = false
-      Socket.isConnected()
+      $scope.enteredTimeoutsHome = ''
+      $scope.update()
+      
+    $scope.getTimoutsGuests = ->
+      $scope.model.timeOutsGuests
+      
+    $scope.$watch('enteredTimeoutsGuests', -> (
+      if  $scope.enteredTimeoutsGuests is '-'
+        return
+      
+      unless 3 >= $scope.enteredTimeoutsGuests >= -1
+        $scope.enteredTimeoutsGuests = ''
+    ))
+    
+    $scope.setTimoutsGuests = (nrTimeouts) ->
+      if nrTimeouts is undefined
+        if $scope.enteredTimeoutsGuests
+          nrTimeouts = $scope.enteredTimeoutsGuests
+        else
+          return false
+      
+      if 3 >= nrTimeouts >= -1
+        $scope.model.timeOutsGuests = parseInt nrTimeouts
+      
+      $scope.enteredTimeoutsGuests = ''
+      $scope.update()
+      
+    $scope.getPoints = (home) ->
+      if home
+        $scope.model.pointsHome
+      else
+        $scope.model.pointsGuests
         
+    $scope.$watch('model.pointsHome', -> (
+      $scope.tmpHomePoints = $scope.model.pointsHome
+    ))
+    
+    $scope.$watch('model.pointsGuests', -> (
+      $scope.tmpGuestPoints = $scope.model.pointsGuests
+    ))
+    
+    $scope.$watch('tmpHomePoints', -> (
+      if isNaN($scope.tmpHomePoints) or parseInt($scope.tmpHomePoints) < 0
+        $scope.tmpHomePoints = $scope.model.pointsHome
+    ))
+    
+    $scope.$watch('tmpGuestPoints', -> (
+      if isNaN($scope.tmpGuestPoints) or parseInt($scope.tmpGuestPoints) < 0
+        $scope.tmpGuestPoints = $scope.model.pointsGuests
+    ))
+        
+    $scope.setPoints = (home, points) -> 
+      if home is undefined
+        if $scope.tmpHomePoints
+          $scope.setPoints true, parseInt $scope.tmpHomePoints
+        if $scope.tmpGuestPoints
+          $scope.setPoints false, parseInt $scope.tmpGuestPoints
+        return
       
+      points = parseInt points
+      unless points > -1
+        return
+        
+      if home
+        $scope.model.pointsHome = points
+      else
+        $scope.model.pointsGuests = points
+        
+      $scope.update()
+      
+      
+    $scope.getDown = ->
+      $scope.model.down
+      
+    
+    $scope.setDown = (down) ->
+      if 4 >= down >= 0
+        $scope.model.down = parseInt down
+      $scope.update()
+      
+      
+    $scope.getDistance = ->
+      $scope.model.distance
+      
+    $scope.$watch('enteredDistance', -> (
+      unless 100 >= $scope.enteredDistance >= 0
+        $scope.enteredDistance = ''
+    ))
+    
+    $scope.setDistance = (distance) ->
+      if distance is undefined
+        if $scope.enteredDistance
+          distance = $scope.enteredDistance
+        else
+          distance = 10
+      
+      if 100 >= distance >= 0
+        $scope.model.distance = parseInt distance
+      
+      $scope.enteredDistance = ''
+      $scope.update()
 
+        
+class Team extends DataElement
+  key: "unknownTeam"
+		
+  constructor:  ($scope) ->
+    super $scope
+    $scope.model = {
+      teamNameLong: null
+      teamNameShort: null
+      roster: []
+    } 
+    
+    # Types:
+    # 0: Coach/coordinator
+    # 1: Offense
+    # 2: Defense
+    # 3: Special Team
+    $scope.positions = [
+      {value: 'HC', text: 'Headcoach', type: 0}
+      {value: 'OC', text: 'Offense Coordinator', type: 0}
+      {value: 'DC', text: 'Defense Coordinator', type: 0}
+      {value: 'SC', text: 'Special Coordinator', type: 0}
+      
+      {value: 'OL', text: 'Offensive Line', type: 1}
+      {value: 'QB', text: 'Quarterback', type: 1}
+      {value: 'RB', text: 'Runningback', type: 1}
+      {value: 'WR', text: 'Wide Receiver', type: 1}
+      {value: 'TE', text: 'Tight End', type: 1}
+      
+      {value: 'DL', text: 'Defensive Line', type: 2}
+      {value: 'LB', text: 'Linebacker', type: 2}
+      {value: 'DB', text: 'Defensive Back', type: 2}
+      
+      {value: 'P', text: 'Punter', type: 3}
+      {value: 'K', text: 'Kicker', type: 3}
+      {value: 'ST', text: 'other Special', type: 3}
+    ]; 
+    $scope.getTeamNameLong = ->
+      $scope.model.teamNameLong
+    $scope.getTeamNameShort = ->
+      $scope.model.teamNameShort
+    
+    $scope.showPositions = (player) ->
+      selected = [];
+      try
+        angular.forEach($scope.positions, (s) -> 
+          if (player.position.indexOf(s.value) >= 0) 
+            selected.push(s.text);
+        )
+        if selected.length
+          selected.join(', ')
+        else
+          'Not set'
+      catch error
+        'Not set'
+        
+    $scope.updateModelAfterUpload = ->
+      for player in $scope.model.roster # update team parameter
+        player.team = $scope.key
+      $scope.update()
+      
+    $scope.addPlayer = ->
+      $scope.inserted = {
+        id: $scope.model.roster.length+1
+        number: null
+        name: ''
+        position: null
+        dob: null
+        size: null
+        weight: null
+        exp: null
+        nat: "AT"
+        team: $scope.key
+      }
+      $scope.model.roster.push($scope.inserted)
+      
+    $scope.predicate = 'number';
+      
+    $scope.removePlayer = (item) ->
+      #$scope.model.roster.splice(index, 1)
+      $scope.model.roster.splice($scope.model.roster.indexOf(item),1);
+      $scope.update()
+      
+    $scope.sendPlayer = (player) ->
+      $scope.getDataElem("LowerThirds").model.Player = player
+      $scope.getDataElem("LowerThirds").update()
+      location = "/#lower-thirds";
+      true
+      
+    $scope.checkName = (data, id) ->
+      if data is ""
+        return "Empty name not allowed"
+        
     
 
-#ManageCtrl.$inject = ["$scope", "Socket"]
+class HomeTeam extends Team
+  key: "HomeTeam"
+  constructor:  ($scope) ->
+    super $scope
+class GuestTeam extends Team
+  key: "GuestTeam"
+  constructor:  ($scope) ->
+    super $scope
+
+AppCtrl = ($scope) ->
+  $scope.name = "Espresso"
+
+AppCtrl.$inject = ["$scope"]
+HeaderController = ($scope, $location) ->
+    $scope.isActive =  (viewLocation) ->
+        viewLocation is $location.path()
+RosterController = ($scope, $routeParams) ->
+  $scope.team = $routeParams.team.toLowerCase()
+  
+  if $scope.team is "home"
+    new HomeTeam($scope)
+  else if $scope.team is "guests"
+    new GuestTeam($scope)
+  else
+    $scope.team = "---INVALID---"
+
+RouteController = ($scope, $routeParams) ->
+  $scope.templateUrl = '/partials/manage/'+$routeParams.part
+  
+
+  
+  
+  console.log($scope.templateUrl)
+###
+   Generated via coffescript-concat
+   files in angular-concat/controllers
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

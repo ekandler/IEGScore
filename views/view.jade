@@ -8,5 +8,14 @@ block content
         div(ng-controller='GameDataCtrl')
             div(ng-include="'/partials/view/clock'")
             div(ng-include="'/partials/view/scoreboard'")
+            div(ng-include="'/partials/view/lower-thirds'")
     div#outOfTVRight AREA OFF SCREEN
     div#outOfTVBottom AREA OFF SCREEN
+        br
+        span Used for loading stuff
+        br
+        script.
+            for (i = 1; i <= 47; i++) {
+                if (i==25 || i == 26) continue;
+                document.write('<img src="/images/referee/'+i+'.png" height="15px"/>')
+            }

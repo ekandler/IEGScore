@@ -267,6 +267,7 @@ body {
   top: @graphicsSafeTop;
   position: absolute;
   font-family: 'ProLamina-Regular'; 
+  color: #000;
   font-size: 30pt;
   line-height: 1em;
   .animate-container {
@@ -318,6 +319,7 @@ body {
   right: @graphicsSafeLeft;
   top: @graphicsSafeTop;
   font-family: 'ProLamina-Regular'; 
+  color: #000;
   font-size: 24pt;
   line-height: 1em;
   .animate-container {
@@ -326,4 +328,45 @@ body {
     height: 50px;
   }
 
+}
+
+
+#refereeContainer {
+  left: @graphicsSafeLeft; // graphics safe area
+  bottom: @graphicsSafeTop;
+  position: absolute;
+  font-family: 'ProLamina-Regular'; 
+  color: #000;
+  font-size: 20pt;
+  line-height: 1em;
+  .animate-container {
+    background-color: cyan;
+    width: 225px;
+    height: 140px;
+  }
+  .refereeImage {
+    position: absolute;
+    top: 0px;
+    left: auto;
+    right: auto;
+    text-align: center;
+    width: 100%;
+    img {
+      height: 90px;
+    }
+  }
+  .refereeText {
+    position: absolute;
+    bottom: 0px;
+    left: auto;
+    right: auto;
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    span {
+      line-height: 1em;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }

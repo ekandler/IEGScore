@@ -17,7 +17,7 @@ ESPRESSO_INDEX = "index.coffee"
 ###
   Types of source files. DO NOT MODIFY!
 ###
-SOURCES = { COFFEE: "coffee", LESS: "less" }
+SOURCES = { COFFEE: "coffee", LESS: "less", CONCAT: "coffeescript-concat" }
 
 ###
   Directory where the source code is
@@ -43,6 +43,11 @@ SERVER_FILENAME = "app.coffee"
   Angular app source folder under APP_DIR
 ###
 ANGULAR_APP_SRC = "#{__dirname}/#{APP_DIR}/angular"
+
+###
+  Coffescript-concat source folder for Angular app under APP_DIR
+###
+ANGULAR_CONCAT_SRC = "#{__dirname}/#{APP_DIR}/angular-concat"
 
 ###
   Client files (static resources) output directory. DO NOT MODIFY!
@@ -99,7 +104,20 @@ buildServer = ->
   Compiles and uglifies client dirs
 ###
 buildClient = ->
-
+  exec "ls -d #{ANGULAR_CONCAT_SRC}/*/", {}, (error, stdout, stderr) ->
+    if error
+      console.log stderr.toString()
+      throw error
+    for line in stdout.split("\n")
+      unless line
+        continue
+      folders = line.split("/")
+      mainfolder = folders[folders.length-2]
+      exec "coffeescript-concat -R #{line} #{line}/#{mainfolder}.coffee -o #{ANGULAR_APP_SRC}/#{mainfolder}.coffee", {}, (error, stdout, stderr) ->
+        if error
+          console.log stderr.toString()
+          throw error
+          
   clientDirs = [
     {
       type: SOURCES.COFFEE,
@@ -117,7 +135,6 @@ buildClient = ->
       input: "#{STYLES_SRC}"
     }
   ]
-
   for dir in clientDirs
     do (dir) ->
       switch dir.type

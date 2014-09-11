@@ -6,21 +6,25 @@ block head
 block content
   div.jumbotron
 
-    h1 Welcome to Espresso
+    h1 Welcome to IEG Score
 
-    div.lead(ng-controller='AppCtrl') Hello, {{name}}
-    span.lead Click on one of the options below to test the project
+    //-
+      div.lead(ng-controller='AppCtrl') Hello, {{name}}
+    span.lead Click on one of the links below to navigate to the different views
       br
       ul
         li
-          a(href='#/home') User listing, details
+          a(href='/manage') Mangement interface
         li
-          a(href='#/socket') Socket server
+          a(href='/overview') Overview
+        li
+          a(href='/view') CG View
+        li
+          a(href='/smartwatch') Smartwatch (clock only)
       hr
       div(ng-view)
 
     div
-      | Angular Espresso, version &nbsp;
-      span(app-version)
+      | Powered by Angular Espresso
 
 

@@ -1,0 +1,7 @@
+div(ng-controller='LowerThirds')
+    div#refereeContainer
+        div.animate-container.transition-faster.movein-left.moveout-left(ng-show="getRefVisible()")
+            div.refereeImage
+                img(src="/images/referee/{{ getRefContent().num }}.png", ng-show="getRefContent().num")
+            div.refereeText
+                span(ng-bind="getRefContent().name")
