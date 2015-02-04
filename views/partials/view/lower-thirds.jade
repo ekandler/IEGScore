@@ -1,7 +1,44 @@
 div(ng-controller='LowerThirds')
     div#refereeContainer
-        div.animate-container.transition-faster.movein-left.moveout-left(ng-show="getRefVisible()")
+        div.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getRefVisible()")
             div.refereeImage
                 img(src="/images/referee/{{ getRefContent().num }}.png", ng-show="getRefContent().num")
             div.refereeText
                 span(ng-bind="getRefContent().name")
+                
+                
+    div#lowerThirdText
+        div.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getGPVisible()")
+            div.firstLine
+                span(ng-bind="getGPContent().split('\n')[0]")
+            div.secondLine
+                span(ng-bind="getGPContent().split('\n')[1]")
+                
+    div#lowerThirdPlayer
+        div.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getPlayerVisbileSmall() || getPlayerVisbileLarge()")
+            div.name
+                span(ng-bind="getPlayer().name")
+            div.team
+                span(ng-bind="getDataElem(getPlayer().team).model.teamNameLong || getPlayer().team")
+            div.info
+                div.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getPlayerVisbileLarge()")
+                    div.position(ng-show="getPlayer().position")
+                        span Pos: 
+                        span(ng-bind="getPlayer().position.join()")
+                    div.age(ng-show="getPlayer().dob")
+                        span Age: 
+                        span(ng-bind="calcAge(getPlayer().dob)")
+                    div.size(ng-show="getPlayer().size")
+                        span Size: 
+                        span(ng-bind="getPlayer().size + ' cm'")
+                    div.weight(ng-show="getPlayer().weight")
+                        span Weight: 
+                        span(ng-bind="getPlayer().weight + ' kg'")
+                    div.exp(ng-show="getPlayer().exp")
+                        span Exp: 
+                        span(ng-bind="getPlayer().exp")
+                    div.nat(ng-show="getPlayer().nat")
+                        span Nat: 
+                        span(ng-bind="getPlayer().nat")
+            
+        

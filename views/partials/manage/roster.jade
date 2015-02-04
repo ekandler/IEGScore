@@ -18,6 +18,14 @@ block managecontent
     +formElem ("Team Name Short", "model.teamNameShort")
         div.form-control-static
             a(editable-text="model.teamNameShort", onaftersave="update()", e-required, d-class="form-control") {{ model.teamNameShort || "empty" }}
+    +formElem ("Team Color", "model.teamColor")
+        div.form-control-static
+            a(editable-color="model.teamColor", onaftersave="update()", e-required, d-class="form-control") {{ model.teamColor || "not set" }}
+        p.help-block
+            span(style="background-color: #ff0000; -webkit-filter: hue-rotate({{ getHue() }}deg);") &nbsp;&nbsp;&nbsp;&nbsp;
+            |  Hue: 
+            span(ng-bind="getHue()") 
+            | &deg; 
                 
     +formElem ("Add a player", "")
         button.add.btn.btn-primary(ng-click="addPlayer()") Add Player

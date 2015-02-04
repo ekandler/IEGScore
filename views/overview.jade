@@ -10,11 +10,11 @@ block content
                 div.col-lg-3.col-md-6.condensedcolumn
                     div(ng-controller='GameClock')
                         div.panel.panel-default.condensedpanel.overview-fullheight
-                            div.panel-heading Game clock 
+                            div.panel-heading(animate-on-change="getClockVisible()") Game clock 
                                 span.label.label-danger(ng-show="getClockVisible()") On Air
                                 span.label.label-default(ng-hide="getClockVisible()") invisble
                             ul.list-group.inline
-                                li.list-group-item.inline
+                                li.list-group-item.inline(animate-on-change="getClockRunning() + getInfo()")
                                     span(style="font-size: xx-large; text-shadow: grey 1px 1px", ng-bind="getTime()")  
                                     span   
                                     span.label.label-danger(ng-show="getClockRunning()") running
@@ -25,7 +25,7 @@ block content
                                     span.label.label-info(ng-show="getInfo() == 2") Timeout {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}
                                     span.label.label-info(ng-show="getInfo() == 3") Timeout {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
                                     span.label.label-info(ng-show="getInfo() == 4") Timeout Officials
-                                li.list-group-item.inline Quarter:  
+                                li.list-group-item.inline(animate-on-change="getQuarter()") Quarter:  
                                     span.label.label-default(ng-show="getQuarter() == 0") unknown/hidden
                                     span.label.label-primary(ng-show="getQuarter() == 1") 1st
                                     span.label.label-primary(ng-show="getQuarter() == 2") 2nd
@@ -35,12 +35,12 @@ block content
                 div.col-lg-3.col-md-6.condensedcolumn
                     div(ng-controller='Scoreboard')
                         div.panel.panel-default.condensedpanel.overview-fullheight
-                            div.panel-heading Scoreboard 
+                            div.panel-heading(animate-on-change="getScorebardVisibleSmall() || getScorebardVisibleBig()") Scoreboard 
                                 span.label.label-warning(ng-show="getScorebardVisibleSmall()") Small Scoreboard On Air
                                 span.label.label-danger(ng-show="getScorebardVisibleBig()") Big Scoreboard On Air
                                 span.label.label-default(ng-hide="getScorebardVisibleSmall() || getScorebardVisibleBig()") invisble
                             ul.list-group.inline
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getPoints(true) + getPoints(false)")
                                     span Points: 
                                     span.label.label-primary(ng-bind="getDataElem('HomeTeam').model.teamNameShort || 'Home'")
                                     span  
@@ -49,15 +49,15 @@ block content
                                     span.label.label-primary(ng-bind="getDataElem('GuestTeam').model.teamNameShort || 'Guests'")
                                 li.list-group-item
                                     div.row
-                                        div.col-md-6
+                                        div.col-md-6(animate-on-change="getTimoutsHome() + getTimoutsGuests()")
                                             span Timeouts left: 
                                             span  
                                             span.label.label-primary(ng-bind="getTimoutsHome() + ' : ' + getTimoutsGuests()", ng-hide="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)")  
                                             span.label.label-default(ng-show="(getTimoutsHome() < 0 || getTimoutsGuests() < 0)") unknown
-                                        div.col-md-6
+                                        div.col-md-6(animate-on-change="getBallPossession()")
                                             span Offense: 
                                             span.label.label-primary(ng-bind="getBallPossession() ? (getDataElem('HomeTeam').model.teamNameShort || 'Home') : (getDataElem('GuestTeam').model.teamNameShort || 'Guests')") 
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getDown() || getDistance()")
                                     span Down/Distance: 
                                     span.label.label-default(ng-show="getDown() == 0") unknown/hidden
                                     span.label.label-primary(ng-show="getDown() == 1") 1st
@@ -65,28 +65,30 @@ block content
                                     span.label.label-primary(ng-show="getDown() == 3") 3rd
                                     span.label.label-primary(ng-show="getDown() == 4") 4th
                                     span  &amp;  
-                                    span.label.label-primary(ng-bind="getDistance()", ng-hide="getDistance() == 0")
-                                    span.label.label-primary(ng-show="getDistance() == 0") Goal
+                                    span.label.label-primary(ng-bind="getDistance()", ng-show="getDistance() > 0")
+                                    span.label.label-primary(ng-show="getDistance() == 0") Inches
+                                    span.label.label-primary(ng-show="getDistance() == -1") Goal
+                                    span.label.label-default(ng-show="getDistance() == -2") unknown/hidden
                 div(ng-controller='LowerThirds')
                     div.col-lg-3.col-md-6.condensedcolumn
                         div.panel.panel-default.condensedpanel.overview-halfheight
-                            div.panel-heading Referee Decision 
+                            div.panel-heading(animate-on-change="getRefVisible()") Referee Decision 
                                 span.label.label-danger(ng-show="getRefVisible()") On Air
                                 span.label.label-default(ng-hide="getRefVisible()") invisble
                             ul.list-group.inline
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getRefContent().num")
                                     span(ng-bind="getRefContent().num + ' | ' + getRefContent().name", ng-show="getRefContent()")
                                     span(ng-hide="getRefContent()") not set
                         div.panel.panel-default.condensedpanel.overview-halfheight
-                            div.panel-heading General purpose insert 
+                            div.panel-heading(animate-on-change="getGPVisible()") General purpose insert 
                                 span.label.label-danger(ng-show="getGPVisible()") On Air
                                 span.label.label-default(ng-hide="getGPVisible()") invisble
                             ul.list-group.inline
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getGPContent(true)")
                                     span(ng-bind-html="getGPContent(true)")
                     div.col-lg-3.col-md-6.condensedcolumn
                         div.panel.panel-default.condensedpanel.overview-fullheight
-                            div.panel-heading Player insert 
+                            div.panel-heading(animate-on-change="getPlayerVisbileSmall() || getPlayerVisbileLarge()") Player insert 
                                 span.label.label-danger(ng-show="getPlayerVisbileSmall()") On Air
                                 span.label.label-danger(ng-show="getPlayerVisbileLarge()") Detailed On Air
                                 span.label.label-default(ng-hide="getPlayerVisbileSmall() || getPlayerVisbileLarge()") invisble
@@ -94,15 +96,15 @@ block content
                                 li.list-group-item
                                     span not set
                             ul.list-group.inline(ng-show="getPlayer()")
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getPlayer().team")
                                     span Team: 
                                     span(ng-bind="getDataElem(getPlayer().team).model.teamNameShort || getPlayer().team")
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getPlayer().name")
                                     span Player: 
                                     span(ng-bind="getPlayer().name")
                                     span  
                                     span.label.label-primary(ng-bind="'# ' + getPlayer().number", ng-show="getPlayer().number")
-                                li.list-group-item
+                                li.list-group-item(animate-on-change="getPlayer().name")
                                     span Info: 
                                     span.label.label-primary(ng-bind="'pos: ' + getPlayer().position.join()", ng-show="getPlayer().position")
                                     span  

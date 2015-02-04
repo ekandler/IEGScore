@@ -34,7 +34,17 @@ div#scoreboardContainer(ng-controller='Scoreboard')
                     div.timeoutPoint(ng-show="getTimoutsGuests() <= 2") x
                     div.timeoutPoint(ng-show="getTimoutsGuests() == 3") -
     div#scoreboardBig
-        div.animate-container.transition-faster.movein-top.moveout-top(ng-show="getScorebardVisibleBig()")
-            | Big one
+        div.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getScorebardVisibleBig()")
+            div.score
+                div.teamname.hometeam
+                    span(ng-bind="getDataElem('HomeTeam').model.teamNameLong")
+                div.teamname.guestteam
+                    span(ng-bind="getDataElem('GuestTeam').model.teamNameLong")
+                div.points.homepoints
+                    span(ng-bind="getPoints(true)")
+                div.points.seperator
+                    span  : 
+                div.points.guestpoints
+                    span(ng-bind="getPoints(false)")
             
             

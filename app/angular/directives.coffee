@@ -59,3 +59,15 @@ module.directive "ngFileSelect", ->
           element.parentNode.replaceChild(element.cloneNode(true), element);
         
       )
+
+
+module.directive('animateOnChange', ($animate) ->
+  return (scope, elem, attr) ->
+      scope.$watch(attr.animateOnChange, (nv,ov) ->
+        if (nv!=ov)
+          c = 'change'
+          $animate.addClass(elem,c, ->
+            $animate.removeClass(elem,c)
+          )
+      )  
+)

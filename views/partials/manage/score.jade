@@ -45,6 +45,18 @@ block managecontent
                 button.btn.btn-success(ng-click="showScoreboardSmall()", ng-class="{ active: !getScorebardVisibleSmall(), disabled: getScorebardVisibleSmall() }") Show
                 button.btn.btn-warning(ng-click="showScoreboardBig()", ng-class="{ active: !getScorebardVisibleBig(), disabled: getScorebardVisibleBig() }") Full
                 button.btn.btn-danger(ng-click="hideScoreboard()", ng-class="{ active: getScorebardVisibleSmall() || getScorebardVisibleBig(), disabled: !(getScorebardVisibleSmall() || getScorebardVisibleBig())}") Hide
+                
+        -var elements = []
+        -elements.push({class: "btn-primary", text: "Unknown/Hide", val: 0, fnset: "setDown(0)"})
+        -elements.push({class: "btn-info", text: "1st", val: 1, fnset: "setDown(1)"})
+        -elements.push({class: "btn-info", text: "2nd", val: 2, fnset: "setDown(2)"})
+        -elements.push({class: "btn-info", text: "3rd", val: 3, fnset: "setDown(3)"})
+        -elements.push({class: "btn-info", text: "4th", val: 4, fnset: "setDown(4)"})
+        +singleChoice("getDown()", elements, "Down")
+            
+            
+        +incDecVal("getDistance()", "setDistance()", "setDistance(getDistance()+1)", "setDistance(getDistance()-1)", "enteredDistance", "Distance to go", "10")
+            | Special values: 0 (&amp; Inches), -1 (&amp; Goal), -2 (unknown/hide)
         
         +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "{{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}", "{{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}")
             | Offense: {{ getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
@@ -67,14 +79,3 @@ block managecontent
             | Special values: -1 (unknown / hide)
             
 
-        -var elements = []
-        -elements.push({class: "btn-primary", text: "Unknown/Hide", val: 0, fnset: "setDown(0)"})
-        -elements.push({class: "btn-info", text: "1st", val: 1, fnset: "setDown(1)"})
-        -elements.push({class: "btn-info", text: "2nd", val: 2, fnset: "setDown(2)"})
-        -elements.push({class: "btn-info", text: "3rd", val: 3, fnset: "setDown(3)"})
-        -elements.push({class: "btn-info", text: "4th", val: 4, fnset: "setDown(4)"})
-        +singleChoice("getDown()", elements, "Down")
-            
-            
-        +incDecVal("getDistance()", "setDistance()", "setDistance(getDistance()+1)", "setDistance(getDistance()-1)", "enteredDistance", "Distance to go", "10")
-            | Distance of 0 specifies '&amp; Goal'

@@ -739,6 +739,10 @@ class Scoreboard extends DataElement
     $scope.setDown = (down) ->
       if 4 >= down >= 0
         $scope.model.down = parseInt down
+      if $scope.model.down == 1
+        $scope.setDistance 10
+      else
+        $scope.setDistance -2
       $scope.update()
       
       
@@ -746,7 +750,9 @@ class Scoreboard extends DataElement
       $scope.model.distance
       
     $scope.$watch('enteredDistance', -> (
-      unless 100 >= $scope.enteredDistance >= 0
+      if  $scope.enteredDistance is '-'
+        return
+      unless 100 >= $scope.enteredDistance >= -2
         $scope.enteredDistance = ''
     ))
     
@@ -757,7 +763,7 @@ class Scoreboard extends DataElement
         else
           distance = 10
       
-      if 100 >= distance >= 0
+      if 100 >= distance >= -2
         $scope.model.distance = parseInt distance
       
       $scope.enteredDistance = ''
@@ -772,6 +778,7 @@ class Team extends DataElement
     $scope.model = {
       teamNameLong: null
       teamNameShort: null
+      teamColor: "#ff0000"
       roster: []
     } 
     
@@ -804,6 +811,40 @@ class Team extends DataElement
       $scope.model.teamNameLong
     $scope.getTeamNameShort = ->
       $scope.model.teamNameShort
+      
+    $scope.getTeamColor = ->
+      $scope.model.teamColor
+      
+    `function rgbToHsl(r, g, b){
+      r /= 255, g /= 255, b /= 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var h, s, l = (max + min) / 2;
+  
+      if(max == min){
+          h = s = 0; // achromatic
+      }else{
+          var d = max - min;
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+          switch(max){
+              case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+              case g: h = (b - r) / d + 2; break;
+              case b: h = (r - g) / d + 4; break;
+          }
+          h /= 6;
+      }
+  
+      return [h, s, l];
+    }`  
+    
+    $scope.getHue = ->
+      color = $scope.model.teamColor
+      r = parseInt(color.substr(1,2), 16) # Grab the hex representation of red (chars 1-2) and convert to decimal (base 10).
+      g = parseInt(color.substr(3,2), 16)
+      b = parseInt(color.substr(5,2), 16)
+      
+      hsl =  rgbToHsl r, g, b
+      
+      return parseInt(hsl[0] * 360)
     
     $scope.showPositions = (player) ->
       selected = [];

@@ -20,7 +20,7 @@ angular.module("myApp", ["ngRoute", "myApp.filters", "myApp.services", "myApp.di
   ]
 
 # textangular removed due to hot pixel in view
-angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'siyfion.sfTypeahead', 'ngAnimate'])
+angular.module("ScoreApp", ["ngRoute", "myApp.filters", "myApp.services", "ScoreApp.directives", "xeditable", 'siyfion.sfTypeahead', 'ngAnimate', 'ngSanitize'])
 .config ["$routeProvider",
   ($routeProvider) ->
     $routeProvider.when "/roster/:team", {templateUrl: "partials/manage/roster", controller: RosterController}

@@ -230,6 +230,20 @@ body {
   display: block !important;
 }
 
+.movein-right.ng-hide-remove,
+.moveout-right.ng-hide-add.ng-hide-add-active {
+  opacity: 0;
+  left: 100px;
+  display: block !important;
+}
+
+.moveout-right.ng-hide-add,
+.movein-right.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1;
+  left: 0;
+  display: block !important;
+}
+
 .movein-top.ng-hide-remove,
 .moveout-top.ng-hide-add.ng-hide-add-active {
   opacity: 0;
@@ -242,6 +256,45 @@ body {
   opacity: 1;
   top: 0;
   display: block !important;
+}
+
+.movein-bottom.ng-hide-remove,
+.moveout-bottom.ng-hide-add.ng-hide-add-active {
+  opacity: 0;
+  top: 100px;
+  display: block !important;
+}
+
+.moveout-bottom.ng-hide-add,
+.movein-bottom.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1;
+  top: 0;
+  display: block !important;
+}
+
+
+.change {
+    background-color: red !important;
+    background-image: none !important;
+}
+.change-add,.change-remove {
+  background-color: white !important;
+    background-image: none !important;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s ease-in-out;
+}
+.change-add-active {
+  background-color: red !important;
+    background-image: none !important;
+}
+.change-remove {
+    background-color: red !important;
+    background-image: none !important;
+
+}
+.change-remove-active {
+  background-color: white !important;
+    background-image: none !important;
 }
 
 

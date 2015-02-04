@@ -16,12 +16,12 @@ block managecontent
         //- additional clock info elements
         -var elements = []
         -elements.push({class: "btn-primary", text: "No Info", val: 0, fnset: "setInfo(0)"})
-        -elements.push({class: "btn-warning", text: "Flag", val: 1, fnset: "setInfo(1)"})
+        -elements.push({class: "btn-warning", text: "Flag", val: 1, fnset: "stopClock(); setInfo(1)"})
         -elements.push({class: "btn-info", text: "T {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}", val: 2, fnset: "stopClock(); setInfo(2)"})
         -elements.push({class: "btn-info", text: "T {{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}", val: 3, fnset: "stopClock(); setInfo(3)"})
         -elements.push({class: "btn-info", text: "T Officials", val: 4, fnset: "stopClock(); setInfo(4)"})
         +singleChoice("getInfo()", elements, "Additional Info")
-            | Pressing a timeout button stops the clock.
+            | Pressing an info button stops the clock.
             
         +incDecVal("getQuarter()", "setQuarter()", "setQuarter(getQuarter()+1)", "setQuarter(getQuarter()-1)", "enteredQuarter", "Quarter")
             | Special values: 0 (unknown / hide), 5 (Overtime)

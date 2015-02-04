@@ -145,6 +145,10 @@ class Scoreboard extends DataElement
     $scope.setDown = (down) ->
       if 4 >= down >= 0
         $scope.model.down = parseInt down
+      if $scope.model.down == 1
+        $scope.setDistance 10
+      else
+        $scope.setDistance -2
       $scope.update()
       
       
@@ -152,7 +156,9 @@ class Scoreboard extends DataElement
       $scope.model.distance
       
     $scope.$watch('enteredDistance', -> (
-      unless 100 >= $scope.enteredDistance >= 0
+      if  $scope.enteredDistance is '-'
+        return
+      unless 100 >= $scope.enteredDistance >= -2
         $scope.enteredDistance = ''
     ))
     
@@ -163,7 +169,7 @@ class Scoreboard extends DataElement
         else
           distance = 10
       
-      if 100 >= distance >= 0
+      if 100 >= distance >= -2
         $scope.model.distance = parseInt distance
       
       $scope.enteredDistance = ''
