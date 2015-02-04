@@ -1,7 +1,11 @@
 .c9
 .espresso
 node_modules
-public
+public/*
+!public/images
+!public/static
+!public/styles
+public/styles/*
 
 app.js
 
