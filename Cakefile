@@ -142,7 +142,8 @@ buildClient = ->
           compile dir.type, "-c -b -o #{dir.output} #{dir.input}", ->
             #uglifyDirectory dir.output #TODO uncomment uglify
         when SOURCES.LESS
-          compile dir.type, "-x #{dir.input}/*.less > #{dir.output}/#{STYLES_NAME}"
+          compile dir.type, "#{dir.input}/espresso.less > #{dir.output}/espresso.css"
+          #compile dir.type, "-x #{dir.input}/*.less > #{dir.output}/#{STYLES_NAME}"
 
 ###
   Uglifies a directory
