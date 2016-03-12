@@ -3,8 +3,8 @@ exports.setEnv = (environment) ->
   ###
     Common config
   ###
-  exports.HOSTNAME = process.env.IP | "localhost"
-  exports.PORT = process.env.PORT | 80
+  exports.HOSTNAME = process.env.IP || "localhost"
+  exports.PORT = process.env.PORT || 80
   exports.PUBLIC_PATH = "public"
   exports.VIEWS_ENGINE = "jade"
   exports.VIEWS_PATH = "views"
