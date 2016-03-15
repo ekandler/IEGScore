@@ -15,6 +15,7 @@ class LowerThirds extends DataElement
       PlayerVisible: false
       PlayerDetailed: false
       Player: null
+      loopNr: 0
     }
     
     
@@ -148,6 +149,14 @@ class LowerThirds extends DataElement
       $scope.model.PlayerVisible = false
       $scope.model.PlayerDetailed = false
       $scope.update()
+      
+    $scope.setLoop = (nr) ->
+      if (nr >=0)
+        $scope.model.loopNr = nr
+        $scope.update()
+    
+    $scope.getLoopNr = ->
+      $scope.model.loopNr
     
     getTeam = (team) -> # unsafe - not visible to scope
       if not $scope.getDataElem(team)

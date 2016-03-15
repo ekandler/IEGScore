@@ -145,10 +145,7 @@ class Scoreboard extends DataElement
     $scope.setDown = (down) ->
       if 4 >= down >= 0
         $scope.model.down = parseInt down
-      if $scope.model.down == 1
-        $scope.setDistance 10
-      else
-        $scope.setDistance -2
+      $scope.setDistance -2
       $scope.update()
       
       

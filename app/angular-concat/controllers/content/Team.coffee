@@ -8,9 +8,15 @@ class Team extends DataElement
     $scope.model = {
       teamNameLong: null
       teamNameShort: null
+      showRoster: false
       teamColor: "#ff0000"
       roster: []
+      hue: 0
     } 
+    
+    $scope.$watch("model.teamColor", (newValue, oldValue) ->
+        $scope.model.hue = $scope.getHue($scope.model.hue)
+    )
     
     # Types:
     # 0: Coach/coordinator
@@ -41,6 +47,13 @@ class Team extends DataElement
       $scope.model.teamNameLong
     $scope.getTeamNameShort = ->
       $scope.model.teamNameShort
+      
+    $scope.toggleRosterVisibility = ->
+      $scope.model.showRoster = not $scope.model.showRoster
+      $scope.update()
+      
+    $scope.getRosterVisible = ->
+      $scope.model.showRoster
       
     $scope.getTeamColor = ->
       $scope.model.teamColor

@@ -7,6 +7,14 @@ block panelvars
 
 block managecontent
     div(ng-controller='LowerThirds')
+    
+        +formElem ("Set music loop", "getLoopNr()", true)
+            a.btn-group.btn-toggle
+                button.btn.btn-default(ng-click="setLoop(0)", ng-class="{ active: getLoopNr()==0, disabled: getLoopNr()==0 }") off
+                button.btn.btn-primary(ng-click="setLoop(1)", ng-class="{ active: getLoopNr()==1, disabled: getLoopNr()==1 }") Loop 1
+                button.btn.btn-info(   ng-click="setLoop(2)", ng-class="{ active: getLoopNr()==2, disabled: getLoopNr()==2 }") Loop 2
+                button.btn.btn-warning(ng-click="setLoop(3)", ng-class="{ active: getLoopNr()==3, disabled: getLoopNr()==3 }") Loop 3
+                button.btn.btn-danger( ng-click="setLoop(4)", ng-class="{ active: getLoopNr()==4, disabled: getLoopNr()==4 }") Loop 4
 
         +booleanToggle("toggleRefVisibility()", "getRefVisible()", "Show referee decision", "Show", "Hide")
         +formElem ("Set referee decision", "getRefContent()|json", true)

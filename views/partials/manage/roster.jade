@@ -2,7 +2,7 @@ extends managelayout
 include mixins
 
 block panelvars
-  - var panelheading='Roster {{ team }}'
+  - var panelheading='Roster {{ model.teamNameLong || team }}'
   - var description = 'Enter the team'
   
 
@@ -18,6 +18,8 @@ block managecontent
     +formElem ("Team Name Short", "model.teamNameShort")
         div.form-control-static
             a(editable-text="model.teamNameShort", onaftersave="update()", e-required, d-class="form-control") {{ model.teamNameShort || "empty" }}
+            
+    +booleanToggle("toggleRosterVisibility()", "getRosterVisible()", "Show team roster", "Show", "Hide")
     +formElem ("Team Color", "model.teamColor")
         div.form-control-static
             a(editable-color="model.teamColor", onaftersave="update()", e-required, d-class="form-control") {{ model.teamColor || "not set" }}

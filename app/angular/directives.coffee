@@ -71,3 +71,11 @@ module.directive('animateOnChange', ($animate) ->
           )
       )  
 )
+
+module.directive('ngControlAudio', ($audio) ->
+  return (scope, elem, attr) ->
+      scope.$watch(attr.ngControlAudio, (nv,ov) ->
+        if (nv!=ov)
+          console.log "change"
+      )  
+)

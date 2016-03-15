@@ -46,6 +46,11 @@ block managecontent
                 button.btn.btn-warning(ng-click="showScoreboardBig()", ng-class="{ active: !getScorebardVisibleBig(), disabled: getScorebardVisibleBig() }") Full
                 button.btn.btn-danger(ng-click="hideScoreboard()", ng-class="{ active: getScorebardVisibleSmall() || getScorebardVisibleBig(), disabled: !(getScorebardVisibleSmall() || getScorebardVisibleBig())}") Hide
                 
+        +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "{{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}", "{{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}")
+            | Offense: {{ getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
+            br
+            | Defense: {{ !getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
+                
         -var elements = []
         -elements.push({class: "btn-primary", text: "Unknown/Hide", val: 0, fnset: "setDown(0)"})
         -elements.push({class: "btn-info", text: "1st", val: 1, fnset: "setDown(1)"})
@@ -58,10 +63,6 @@ block managecontent
         +incDecVal("getDistance()", "setDistance()", "setDistance(getDistance()+1)", "setDistance(getDistance()-1)", "enteredDistance", "Distance to go", "10")
             | Special values: 0 (&amp; Inches), -1 (&amp; Goal), -2 (unknown/hide)
         
-        +booleanToggle("toggleBallPossession()", "getBallPossession()", "Set ball possession", "{{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}", "{{ getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}")
-            | Offense: {{ getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
-            br
-            | Defense: {{ !getBallPossession() ? getDataElem('HomeTeam').model.teamNameShort || 'Home' : getDataElem('GuestTeam').model.teamNameShort || 'Guests' }}
         +formElem ("Total Points", "getPoints(true) + ':' + getPoints(false)", true)
             div.input-group
                 span.input-group-addon.control-label {{ getDataElem('HomeTeam').model.teamNameShort || 'Home' }}

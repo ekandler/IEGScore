@@ -329,6 +329,7 @@ class LowerThirds extends DataElement
       PlayerVisible: false
       PlayerDetailed: false
       Player: null
+      loopNr: 0
     }
     
     
@@ -462,6 +463,14 @@ class LowerThirds extends DataElement
       $scope.model.PlayerVisible = false
       $scope.model.PlayerDetailed = false
       $scope.update()
+      
+    $scope.setLoop = (nr) ->
+      if (nr >=0)
+        $scope.model.loopNr = nr
+        $scope.update()
+    
+    $scope.getLoopNr = ->
+      $scope.model.loopNr
     
     getTeam = (team) -> # unsafe - not visible to scope
       if not $scope.getDataElem(team)
@@ -739,10 +748,7 @@ class Scoreboard extends DataElement
     $scope.setDown = (down) ->
       if 4 >= down >= 0
         $scope.model.down = parseInt down
-      if $scope.model.down == 1
-        $scope.setDistance 10
-      else
-        $scope.setDistance -2
+      $scope.setDistance -2
       $scope.update()
       
       
@@ -778,9 +784,15 @@ class Team extends DataElement
     $scope.model = {
       teamNameLong: null
       teamNameShort: null
+      showRoster: false
       teamColor: "#ff0000"
       roster: []
+      hue: 0
     } 
+    
+    $scope.$watch("model.teamColor", (newValue, oldValue) ->
+        $scope.model.hue = $scope.getHue($scope.model.hue)
+    )
     
     # Types:
     # 0: Coach/coordinator
@@ -811,6 +823,13 @@ class Team extends DataElement
       $scope.model.teamNameLong
     $scope.getTeamNameShort = ->
       $scope.model.teamNameShort
+      
+    $scope.toggleRosterVisibility = ->
+      $scope.model.showRoster = not $scope.model.showRoster
+      $scope.update()
+      
+    $scope.getRosterVisible = ->
+      $scope.model.showRoster
       
     $scope.getTeamColor = ->
       $scope.model.teamColor
@@ -908,6 +927,14 @@ class GuestTeam extends Team
   constructor:  ($scope) ->
     super $scope
 
+class Audio
+    scope = null
+
+    constructor:  ($scope) ->
+        @scope = $scope
+        
+
+
 AppCtrl = ($scope) ->
   $scope.name = "Espresso"
 
@@ -936,6 +963,7 @@ RouteController = ($scope, $routeParams) ->
    Generated via coffescript-concat
    files in angular-concat/controllers
 ###
+
 
 
 

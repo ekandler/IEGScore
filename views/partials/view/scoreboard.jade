@@ -1,50 +1,79 @@
 //- Load team controllers to be able to display team names
 div(ng-controller='HomeTeam')
 div(ng-controller='GuestTeam')
-div#scoreboardContainer(ng-controller='Scoreboard')
-    div#scoreboardSmall
-        div.animate-container.transition-faster.movein-top.moveout-top(ng-show="getScorebardVisibleSmall()")
-            div.distanceDown
-                div.transition-slow.fadein.fadeout(ng-hide="getDown() == 0")
-                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 1") 1st
-                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 2") 2nd
-                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 3") 3rd
-                    span.transition-slow.fadein.fadeout(ng-show="getDown() == 4") 4th
-                    span  &amp; 
-                    span(ng-bind="getDistance()", ng-hide="getDistance() == 0")
-                    span(ng-show="getDistance() == 0") Goal
-            div.score
-                div.teamname.hometeam(ng-bind="getDataElem('HomeTeam').model.teamNameShort")
-                div.points.homepoints(ng-bind="getPoints(true)")
-                div.teamname.guestteam(ng-bind="getDataElem('GuestTeam').model.teamNameShort")
-                div.points.guestpoints(ng-bind="getPoints(false)")
-            div.timeouts
-                div.timeoutsHome(ng-show="getTimoutsHome() >= 0")
-                    div.timeoutPoint(ng-show="getTimoutsHome() == 0") x
-                    div.timeoutPoint(ng-show="getTimoutsHome() >= 1") -
-                    div.timeoutPoint(ng-show="getTimoutsHome() <= 1") x
-                    div.timeoutPoint(ng-show="getTimoutsHome() >= 2") -
-                    div.timeoutPoint(ng-show="getTimoutsHome() <= 2") x
-                    div.timeoutPoint(ng-show="getTimoutsHome() == 3") -
-                div.timeoutsGuests(ng-show="getTimoutsGuests() >= 0")
-                    div.timeoutPoint(ng-show="getTimoutsGuests() == 0") x
-                    div.timeoutPoint(ng-show="getTimoutsGuests() >= 1") -
-                    div.timeoutPoint(ng-show="getTimoutsGuests() <= 1") x
-                    div.timeoutPoint(ng-show="getTimoutsGuests() >= 2") -
-                    div.timeoutPoint(ng-show="getTimoutsGuests() <= 2") x
-                    div.timeoutPoint(ng-show="getTimoutsGuests() == 3") -
+
+div(ng-controller='Scoreboard')
+    div#mainBar
+        div#mainBarAnimate.animate-container.transition-faster.movein-top.moveout-top(ng-show="model.visibleSmall")
+            div#scoreboardContainer
+                div(ng-include="'/partials/view/clock'")
+                div#scoreboardSmall
+                    div.container
+                        div.distanceDown
+                            div.transition-slow.fadein.fadeout(ng-hide="getDown() == 0")
+                                span(ng-show="getDown() == 1") 1
+                                    sup st
+                                span(ng-show="getDown() == 2") 2
+                                    sup nd
+                                span(ng-show="getDown() == 3") 3
+                                    sup rd
+                                span(ng-show="getDown() == 4") 4
+                                    sup th
+                                span(ng-show="getDistance() == -2 && getDown()>0") &nbsp;Down
+                                span(ng-hide="getDistance() == -2")  &amp; 
+                                span(ng-bind="getDistance()", ng-hide="getDistance() <= 0 || getDistance() >= 20")
+                                span(ng-show="getDistance() == 0") Inches
+                                span(ng-show="getDistance() == -1") Goal
+                                span(ng-show="getDistance() >= 20") Long
+                        div.score
+                            div.hometeam.team(style="-webkit-filter:  hue-rotate( {{ getDataElem('HomeTeam').model.hue }}deg);")
+                                span.teamname(ng-bind="getDataElem('HomeTeam').model.teamNameShort")
+                                div.points
+                                   span.animate-container.transition-faster.fadein.fadeout(ng-show="getScorebardVisibleSmall()", ng-bind="getPoints(true)")
+                                div.posession.animate-container.transition-faster.movein-right.moveout-right(ng-show="getScorebardVisibleSmall() && getBallPossession()")
+                            div.guestteam.team(style="-webkit-filter:  hue-rotate( {{ getDataElem('GuestTeam').model.hue }}deg);")
+                                div.posession.animate-container.transition-faster.movein-left.moveout-left(ng-show="getScorebardVisibleSmall() && !getBallPossession()")
+                                div.points
+                                    span.animate-container.transition-faster.fadein.fadeout(ng-show="getScorebardVisibleSmall()", ng-bind="getPoints(false)")
+                                span.teamname(ng-bind="getDataElem('GuestTeam').model.teamNameShort")
+                        div.timeouts
+                            div.timeoutsHome(ng-show="getTimoutsHome() >= 0")
+                                div.timeoutPoint(ng-show="getTimoutsHome() == 0") x
+                                div.timeoutPoint(ng-show="getTimoutsHome() >= 1") -
+                                div.timeoutPoint(ng-show="getTimoutsHome() <= 1") x
+                                div.timeoutPoint(ng-show="getTimoutsHome() >= 2") -
+                                div.timeoutPoint(ng-show="getTimoutsHome() <= 2") x
+                                div.timeoutPoint(ng-show="getTimoutsHome() == 3") -
+                            div.timeoutsGuests(ng-show="getTimoutsGuests() >= 0")
+                                div.timeoutPoint(ng-show="getTimoutsGuests() == 0") x
+                                div.timeoutPoint(ng-show="getTimoutsGuests() >= 1") -
+                                div.timeoutPoint(ng-show="getTimoutsGuests() <= 1") x
+                                div.timeoutPoint(ng-show="getTimoutsGuests() >= 2") -
+                                div.timeoutPoint(ng-show="getTimoutsGuests() <= 2") x
+                                div.timeoutPoint(ng-show="getTimoutsGuests() == 3") -
     div#scoreboardBig
-        div.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getScorebardVisibleBig()")
-            div.score
-                div.teamname.hometeam
-                    span(ng-bind="getDataElem('HomeTeam').model.teamNameLong")
-                div.teamname.guestteam
-                    span(ng-bind="getDataElem('GuestTeam').model.teamNameLong")
-                div.points.homepoints
+        div.container.animate-container.transition-faster.movein-bottom.moveout-bottom(ng-show="getScorebardVisibleBig()")
+            div.team.hometeam(style="-webkit-filter:  hue-rotate( {{ getDataElem('HomeTeam').model.hue }}deg);")
+                div.teamname
+                    span(ng-bind-html="getDataElem('HomeTeam').model.teamNameLong")
+                div.points
                     span(ng-bind="getPoints(true)")
-                div.points.seperator
-                    span  : 
-                div.points.guestpoints
+            div.team.guestteam(style="-webkit-filter:  hue-rotate( {{ getDataElem('GuestTeam').model.hue }}deg);")
+                div.teamname
+                    span(ng-bind-html="getDataElem('GuestTeam').model.teamNameLong")
+                div.points
                     span(ng-bind="getPoints(false)")
-            
-            
+            div.infotxt
+                span(ng-show="getDataElem('GameClock').model.quarter == 1") End of 1
+                    sup st 
+                    | Quarter
+                span(ng-show="getDataElem('GameClock').model.quarter == 2") End of 2
+                    sup nd 
+                    | Quarter
+                span(ng-show="getDataElem('GameClock').model.quarter == 3") End of 3
+                    sup rd 
+                    | Quarter
+                span(ng-show="getDataElem('GameClock').model.quarter == 4") End of 4
+                    sup th 
+                    | Quarter
+                span(ng-show="getDataElem('GameClock').model.quarter == 5") Final score
