@@ -366,10 +366,10 @@ body {
   left: -14px;
 }
 #gameClock .info .homepos {
-  left: 243px;
+  left: 240px;
 }
 #gameClock .info .guestpos {
-  left: 675px;
+  left: 680px;
 }
 #gameClock .info .flag {
   color: #ff0;
@@ -417,6 +417,9 @@ body {
   width: 183px;
   top: 3px;
 }
+#scoreboardSmall .distanceDown sup {
+  top: -0.25em;
+}
 #scoreboardSmall .score .team {
   background-image: url('/images/view/main/team.png');
   width: 317px;
@@ -426,7 +429,7 @@ body {
   position: absolute;
 }
 #scoreboardSmall .score .team .points {
-  min-width: 32px;
+  min-width: 36px;
   height: 20px;
 }
 #scoreboardSmall .score .team .teamname {
@@ -462,6 +465,33 @@ body {
 }
 #scoreboardSmall .score .guestteam .posession {
   left: -25px;
+}
+div.timeouts {
+  background-image: url('/images/view/main/timeout_bg.png');
+  width: 104px;
+  height: 6px;
+  position: absolute;
+  top: -10px;
+}
+.timeoutsHome {
+  left: 395px;
+}
+.timeoutsGuests {
+  left: 575px;
+}
+.timeoutPoint {
+  background-image: url('/images/view/main/timeout.png');
+  height: 4px;
+  width: 28px;
+  position: absolute;
+  left: 38px;
+  top: 1px;
+}
+.timeoutPoint:first-child {
+  left: 1px;
+}
+.timeoutPoint:last-child {
+  left: 75px;
 }
 #scoreboardBig {
   position: absolute;
@@ -526,6 +556,55 @@ body {
   left: 70px;
   right: 70px;
   text-align: center;
+}
+.rosterContainer {
+  background-image: url('/images/view/roster/bg.png');
+  width: 1146px;
+  height: 528px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  position: relative;
+}
+.rosterContainer .front {
+  position: absolute;
+  background-image: url('/images/view/roster/front.png');
+  width: 1062px;
+  height: 514px;
+  top: 6px;
+  left: 42px;
+}
+.rosterContainer .text {
+  position: absolute;
+  left: 50px;
+  top: 6px;
+  right: 50px;
+  bottom: 8px;
+  color: #fff;
+  font-family: 'BouCollege-Regular';
+  overflow: hidden;
+}
+.rosterContainer .text .headline {
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+  font-size: 24pt;
+}
+.rosterContainer .text .coaches {
+  text-align: center;
+  font-size: 12pt;
+  line-height: 1em;
+}
+.rosterContainer .text .players {
+  position: absolute;
+  top: 70px;
+  left: 15px;
+  right: 15px;
+  font-size: 14pt;
+}
+.rosterContainer .text .players .condensedcolumn {
+  padding-left: 4px;
+  padding-right: 4px;
 }
 .lowerThird {
   left: 0;

@@ -800,24 +800,24 @@ class Team extends DataElement
     # 2: Defense
     # 3: Special Team
     $scope.positions = [
-      {value: 'HC', text: 'Headcoach', type: 0}
-      {value: 'OC', text: 'Offense Coordinator', type: 0}
-      {value: 'DC', text: 'Defense Coordinator', type: 0}
-      {value: 'SC', text: 'Special Coordinator', type: 0}
+      {value: 'HC', text: 'Headcoach', type: 1}
+      {value: 'OC', text: 'Offense Coordinator', type: 1}
+      {value: 'DC', text: 'Defense Coordinator', type: 1}
+      {value: 'SC', text: 'Special Coordinator', type: 1}
       
-      {value: 'OL', text: 'Offensive Line', type: 1}
-      {value: 'QB', text: 'Quarterback', type: 1}
-      {value: 'RB', text: 'Runningback', type: 1}
-      {value: 'WR', text: 'Wide Receiver', type: 1}
-      {value: 'TE', text: 'Tight End', type: 1}
+      {value: 'OL', text: 'Offensive Line', type: 2}
+      {value: 'QB', text: 'Quarterback', type: 2}
+      {value: 'RB', text: 'Runningback', type: 2}
+      {value: 'WR', text: 'Wide Receiver', type: 2}
+      {value: 'TE', text: 'Tight End', type: 2}
       
-      {value: 'DL', text: 'Defensive Line', type: 2}
-      {value: 'LB', text: 'Linebacker', type: 2}
-      {value: 'DB', text: 'Defensive Back', type: 2}
+      {value: 'DL', text: 'Defensive Line', type: 3}
+      {value: 'LB', text: 'Linebacker', type: 3}
+      {value: 'DB', text: 'Defensive Back', type: 3}
       
-      {value: 'P', text: 'Punter', type: 3}
-      {value: 'K', text: 'Kicker', type: 3}
-      {value: 'ST', text: 'other Special', type: 3}
+      {value: 'P', text: 'Punter', type: 4}
+      {value: 'K', text: 'Kicker', type: 4}
+      {value: 'ST', text: 'other Special', type: 4}
     ]; 
     $scope.getTeamNameLong = ->
       $scope.model.teamNameLong
@@ -879,6 +879,45 @@ class Team extends DataElement
       catch error
         'Not set'
         
+    $scope.isCoach = (player) ->
+      foundCoach = false
+      try
+        angular.forEach($scope.positions, (s) -> 
+          if (player.position.indexOf(s.value) >= 0) 
+            if s.type is 1
+              foundCoach = true
+        )
+        foundCoach
+      catch error
+        false
+        
+    $scope.isPlayer = (player) ->
+      foundPlayer = false
+      if player.position.length is 0
+        return true
+      try
+        angular.forEach($scope.positions, (s) -> 
+          if (player.position.indexOf(s.value) >= 0) 
+            if s.type != 1
+              foundPlayer = true
+        )
+        foundPlayer
+      catch error
+        false
+        
+    $scope.usePositions = ->
+      useThem = false
+      try
+        angular.forEach($scope.model.roster, (p) -> 
+          if ($scope.isPlayer(p))
+            if (p.position.length>0)
+              useThem = true
+        )
+        useThem
+      catch error
+        false
+        
+        
     $scope.updateModelAfterUpload = ->
       for player in $scope.model.roster # update team parameter
         player.team = $scope.key
@@ -927,14 +966,6 @@ class GuestTeam extends Team
   constructor:  ($scope) ->
     super $scope
 
-class Audio
-    scope = null
-
-    constructor:  ($scope) ->
-        @scope = $scope
-        
-
-
 AppCtrl = ($scope) ->
   $scope.name = "Espresso"
 
@@ -963,7 +994,6 @@ RouteController = ($scope, $routeParams) ->
    Generated via coffescript-concat
    files in angular-concat/controllers
 ###
-
 
 
 
