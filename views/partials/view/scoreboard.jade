@@ -10,7 +10,7 @@ div(ng-controller='Scoreboard')
                 div#scoreboardSmall
                     div.container
                         div.distanceDown
-                            div.transition-slow.fadein.fadeout(ng-hide="getDown() == 0")
+                            div.animate-container.fadein.fadeout.transition-faster(ng-hide="getDown() == 0")
                                 span(ng-show="getDown() == 1") 1
                                     sup st
                                 span(ng-show="getDown() == 2") 2
