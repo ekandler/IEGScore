@@ -38,7 +38,7 @@ div(ng-controller='GuestTeam')
             div.front(style="-webkit-filter:  hue-rotate({{ model.hue }}deg);")
             div.text
                 div.headline
-                    span(ng-bind="model.teamColor")
+                    span(ng-bind="getTeamNameLong()")
                 div.coaches
                     span(ng-show="(model.roster| filter:isCoach).length==1") Coach: 
                     span(ng-show="(model.roster| filter:isCoach).length>1") Coaches: 

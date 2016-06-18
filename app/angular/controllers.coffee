@@ -785,14 +785,25 @@ class Team extends DataElement
       teamNameLong: null
       teamNameShort: null
       showRoster: false
-      teamColor: "#ff0000"
+      teamColor: "#000000"
       roster: []
       hue: 0
     } 
     
-    $scope.$watch("model.teamColor", (newValue, oldValue) ->
-        $scope.model.hue = $scope.getHue()
+    #$scope.$watch("model", (newValue, oldValue) ->
+    #    $scope.model.hue = $scope.getHue()
+    #    console.log("set team of " + $scope.model.teamNameShort + " hue to " + $scope.model.hue)
+    #)
+    
+    $scope.$watch((scope) ->
+      scope.model.teamColor
+    , () ->
+      if ($scope.model.teamColor == "#000000")
+        return true
+      $scope.model.hue = $scope.getHue()
+      console.log("set team of " + $scope.model.teamNameShort + " hue to " + $scope.model.hue)
     )
+
     
     # Types:
     # 0: Coach/coordinator

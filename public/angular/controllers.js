@@ -976,12 +976,18 @@ Team = (function(_super) {
       teamNameLong: null,
       teamNameShort: null,
       showRoster: false,
-      teamColor: "#ff0000",
+      teamColor: "#000000",
       roster: [],
       hue: 0
     };
-    $scope.$watch("model.teamColor", function(newValue, oldValue) {
-      return $scope.model.hue = $scope.getHue();
+    $scope.$watch(function(scope) {
+      return scope.model.teamColor;
+    }, function() {
+      if ($scope.model.teamColor === "#000000") {
+        return true;
+      }
+      $scope.model.hue = $scope.getHue();
+      return console.log("set team of " + $scope.model.teamNameShort + " hue to " + $scope.model.hue);
     });
     $scope.positions = [
       {
