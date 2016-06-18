@@ -32,20 +32,23 @@ div(ng-controller='LowerThirds')
                     span(ng-bind="getDataElem(getPlayer().team).model.teamNameLong || getPlayer().team")
                 div.transition-faster.movein-left.moveout-left.info(ng-show="getPlayerVisbileLarge()")
                     div.position(ng-show="getPlayer().position")
-                        span Pos: 
-                        span(ng-bind="getPlayer().position.join()")
-                    div.age(ng-show="getPlayer().dob")
-                        span Age: 
-                        span(ng-bind="calcAge(getPlayer().dob)")
-                    div.size(ng-show="getPlayer().size")
-                        span Size: 
-                        span(ng-bind="getPlayer().size + ' cm'")
-                    div.weight(ng-show="getPlayer().weight")
-                        span Weight: 
-                        span(ng-bind="getPlayer().weight + ' kg'")
-                    div.exp(ng-show="getPlayer().exp")
-                        span Exp: 
-                        span(ng-bind="getPlayer().exp+ ' yrs'")
+                        div(ng-repeat="pos in getPlayer().position")
+                            span(ng-show="pos=='HC'") Headcoach
+                            span(ng-show="pos=='OC'") Offense Coordinator
+                            span(ng-show="pos=='DC'") Defense Coordinator
+                            span(ng-show="pos=='SC'") Special Coordinator
+                            span(ng-show="pos=='OL'") Offensive Line
+                            span(ng-show="pos=='QB'") Quarterback
+                            span(ng-show="pos=='RB'") Runningback
+                            span(ng-show="pos=='WR'") Wide Receiver
+                            span(ng-show="pos=='TE'") Tight End
+                            span(ng-show="pos=='DL'") Defensive Line
+                            span(ng-show="pos=='LB'") Linebacker
+                            span(ng-show="pos=='DB'") Defensive Back
+                            span(ng-show="pos=='P'") Punter
+                            span(ng-show="pos=='K'") Kicker
+                            span(ng-show="pos=='ST'") Special Team
+                            span(ng-show="$index != getPlayer().position.length-1") ,
                 div.homepage
                     span www.af-live.at
                 

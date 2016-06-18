@@ -600,7 +600,7 @@ div.timeouts {
   top: 60px;
   left: 15px;
   right: 15px;
-  font-size: 12pt;
+  font-size: 11pt;
 }
 .rosterContainer .text .players .condensedcolumn {
   padding-left: 4px;
@@ -717,4 +717,7 @@ div.timeouts {
   line-height: 1em;
   display: inline-block;
   vertical-align: bottom;
+}
+.tt-menu {
+  background: white;
 }

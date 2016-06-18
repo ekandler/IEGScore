@@ -1,3 +1,4 @@
 .espresso/
 node_modules/
 public/components/
+.c9/

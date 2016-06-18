@@ -15,7 +15,7 @@ class Team extends DataElement
     } 
     
     $scope.$watch("model.teamColor", (newValue, oldValue) ->
-        $scope.model.hue = $scope.getHue($scope.model.hue)
+        $scope.model.hue = $scope.getHue()
     )
     
     # Types:
@@ -117,7 +117,7 @@ class Team extends DataElement
         
     $scope.isPlayer = (player) ->
       foundPlayer = false
-      if player.position.length is 0
+      if !player.position or player.position.length is 0
         return true
       try
         angular.forEach($scope.positions, (s) -> 

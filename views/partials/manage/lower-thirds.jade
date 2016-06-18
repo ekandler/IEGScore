@@ -8,15 +8,11 @@ block panelvars
 block managecontent
     div(ng-controller='LowerThirds')
 
-        +booleanToggle("toggleRefVisibility()", "getRefVisible()", "Show referee decision", "Show", "Hide")
         +formElem ("Set referee decision", "getRefContent()|json", true)
             input.form-control(type="text", class="sfTypeahead", options="refOptions", datasets="refData", select-on-click, ng-model="model.RefDecision")
+        +booleanToggle("toggleRefVisibility()", "getRefVisible()", "Show referee decision", "Show", "Hide")
                 
-        +formElem ("Show player info", "'small: ' + getPlayerVisbileSmall() + '\nfull:' + getPlayerVisbileLarge()")
-            div.btn-group.btn-toggle
-                button.btn.btn-success(ng-click="showPlayerSmall()", ng-class="{ active: !getPlayerVisbileSmall(), disabled: getPlayerVisbileSmall() }") Show
-                button.btn.btn-warning(ng-click="showPlayerLarge()", ng-class="{ active: !getPlayerVisbileLarge(), disabled: getPlayerVisbileLarge() }") Full
-                button.btn.btn-danger(ng-click="hidePlayer()", ng-class="{ active: getPlayerVisbileSmall() || getPlayerVisbileLarge(), disabled: !(getPlayerVisbileSmall() || getPlayerVisbileLarge())}") Hide
+
         +formElem ("Set player to be displayed", "model.Player.name", true)
             div.input-group
                 input.form-control(ng-init="initBloodhound()", type="text", class="sfTypeahead", options="playerOptions", datasets="playerData", select-on-click, ng-model="tmpPlayer")
@@ -34,8 +30,13 @@ block managecontent
                     td {{ model.Player.weight }} kg
                     td {{ model.Player.exp }} exp
                     td {{ model.Player.nat }}
+        +formElem ("Show player info", "'small: ' + getPlayerVisbileSmall() + '\nfull:' + getPlayerVisbileLarge()")
+            div.btn-group.btn-toggle
+                button.btn.btn-success(ng-click="showPlayerSmall()", ng-class="{ active: !getPlayerVisbileSmall(), disabled: getPlayerVisbileSmall() }") Show
+                button.btn.btn-warning(ng-click="showPlayerLarge()", ng-class="{ active: !getPlayerVisbileLarge(), disabled: getPlayerVisbileLarge() }") Full
+                button.btn.btn-danger(ng-click="hidePlayer()", ng-class="{ active: getPlayerVisbileSmall() || getPlayerVisbileLarge(), disabled: !(getPlayerVisbileSmall() || getPlayerVisbileLarge())}") Hide
+
             
-        +booleanToggle("toggleGPVisibility()", "getGPVisible()", "Show general purpose insert", "Show", "Hide")
         +formElem ("General purpose templates", "model.GPtemplates.length", true)
             div.input-group
                 div.input-group-btn
@@ -48,3 +49,4 @@ block managecontent
             div.form-group
                 textarea.form-control(rows=2,ng-model='tmpGPContent')
                 button.btn.btn-primary(ng-disabled="tmpGPContent == getGPContent()", type="submit", ng-click="setGPContent()") Set
+        +booleanToggle("toggleGPVisibility()", "getGPVisible()", "Show general purpose insert", "Show", "Hide")

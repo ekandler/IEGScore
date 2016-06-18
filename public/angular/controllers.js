@@ -981,7 +981,7 @@ Team = (function(_super) {
       hue: 0
     };
     $scope.$watch("model.teamColor", function(newValue, oldValue) {
-      return $scope.model.hue = $scope.getHue($scope.model.hue);
+      return $scope.model.hue = $scope.getHue();
     });
     $scope.positions = [
       {
@@ -1130,7 +1130,7 @@ Team = (function(_super) {
     $scope.isPlayer = function(player) {
       var error, foundPlayer;
       foundPlayer = false;
-      if (player.position.length === 0) {
+      if (!player.position || player.position.length === 0) {
         return true;
       }
       try {
