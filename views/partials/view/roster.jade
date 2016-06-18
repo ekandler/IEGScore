@@ -14,30 +14,18 @@ div(ng-controller='HomeTeam')
                 div.players
                     div.table-responsive.col-lg-4.condensedcolumn
                         table.table.reallyCondensed(style="margin-bottom:0px")
-                            tr
-                                th #
-                                th Name
-                                th(ng-show="usePositions()") Pos
                             tr(ng-repeat="player in model.roster | orderBy:'number' | filter:isPlayer", ng-show="$index < (model.roster | filter:isPlayer).length/3")
                                 td: span {{ player.number || '' }}
                                 td: span {{ player.name || '' }}
                                 td(ng-show="usePositions()"): span {{ player.position.join() || '' }}
                     div.table-responsive.col-lg-4.condensedcolumn
                         table.table.reallyCondensed(style="margin-bottom:0px")
-                            tr
-                                th #
-                                th Name
-                                th(ng-show="usePositions()") Pos
                             tr(ng-repeat="player in model.roster | orderBy:'number' | filter:isPlayer", ng-show="$index >= (model.roster | filter:isPlayer).length/3 && $index < (model.roster | filter:isPlayer).length*2/3")
                                 td: span {{ player.number || '' }}
                                 td: span {{ player.name || '' }}
                                 td(ng-show="usePositions()"): span {{ player.position.join() || '' }}
                     div.table-responsive.col-lg-4.condensedcolumn
                         table.table.reallyCondensed(style="margin-bottom:0px")
-                            tr
-                                th #
-                                th Name
-                                th(ng-show="usePositions()") Pos
                             tr(ng-repeat="player in model.roster | orderBy:'number' | filter:isPlayer", ng-show="$index >= (model.roster | filter:isPlayer).length*2/3")
                                 td: span {{ player.number || '' }}
                                 td: span {{ player.name || '' }}
@@ -60,30 +48,18 @@ div(ng-controller='GuestTeam')
                 div.players
                     div.table-responsive.col-lg-4.condensedcolumn
                         table.table.reallyCondensed(style="margin-bottom:0px")
-                            tr
-                                th #
-                                th Name
-                                th(ng-show="usePositions()") Pos
                             tr(ng-repeat="player in model.roster | orderBy:'number' | filter:isPlayer", ng-show="$index < (model.roster | filter:isPlayer).length/3")
                                 td: span {{ player.number || '' }}
                                 td: span {{ player.name || '' }}
                                 td(ng-show="usePositions()"): span {{ player.position.join() || '' }}
                     div.table-responsive.col-lg-4.condensedcolumn
                         table.table.reallyCondensed(style="margin-bottom:0px")
-                            tr
-                                th #
-                                th Name
-                                th(ng-show="usePositions()") Pos
                             tr(ng-repeat="player in model.roster | orderBy:'number' | filter:isPlayer", ng-show="$index >= (model.roster | filter:isPlayer).length/3 && $index < (model.roster | filter:isPlayer).length*2/3")
                                 td: span {{ player.number || '' }}
                                 td: span {{ player.name || '' }}
                                 td(ng-show="usePositions()"): span {{ player.position.join() || '' }}
                     div.table-responsive.col-lg-4.condensedcolumn
                         table.table.reallyCondensed(style="margin-bottom:0px")
-                            tr
-                                th #
-                                th Name
-                                th(ng-show="usePositions()") Pos
                             tr(ng-repeat="player in model.roster | orderBy:'number' | filter:isPlayer", ng-show="$index >= (model.roster | filter:isPlayer).length*2/3")
                                 td: span {{ player.number || '' }}
                                 td: span {{ player.name || '' }}

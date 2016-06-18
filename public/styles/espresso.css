@@ -597,10 +597,10 @@ div.timeouts {
 }
 .rosterContainer .text .players {
   position: absolute;
-  top: 70px;
+  top: 60px;
   left: 15px;
   right: 15px;
-  font-size: 13pt;
+  font-size: 12pt;
 }
 .rosterContainer .text .players .condensedcolumn {
   padding-left: 4px;
