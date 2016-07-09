@@ -15,9 +15,6 @@ bower install
 echo "Setting up required folders..."
 mkdir public/styles
 
-echo "Removing unnecessary stuff..."
-rm .gitignore
-rm README.md
 
 echo "Building project..."
 cake build
